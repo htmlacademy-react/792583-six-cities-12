@@ -1,7 +1,7 @@
 # Личный проект «Шесть городов»
 
 * Студент: [Vlad Ivanishin](https://up.htmlacademy.ru/react/12/user/792583).
-* Наставник: `Неизвестно`.
+* Наставник: [Михаил Кислый](https://htmlacademy.ru/profile/smart-grizzly).
 
 ---
 
