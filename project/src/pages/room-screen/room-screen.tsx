@@ -1,35 +1,22 @@
+import Bookmark from '../../components/bookmark/bookmark';
+import Header from '../../components/header/header';
 import Logo from '../../components/logo/logo';
+import Rating from '../../components/rating/rating';
+import { AuthorizationStatus, BookmarkVersion } from '../../const';
+import { Comments } from '../../types/comments';
+import { Offer } from '../../types/offers';
 
-export default function RoomScreen(): JSX.Element {
+type RoomScreenProps = {
+  offer: Offer;
+  comments: Comments;
+  authorizationStatus: AuthorizationStatus;
+};
+
+export default function RoomScreen({ offer, comments, authorizationStatus }: RoomScreenProps): JSX.Element {
+  const { bedrooms, city, description, goods, host, id, images, isFavorite, isPremium, location, maxAdults, previewImage, price, rating, title, type } = offer;
   return (
     <div className="page">
-      <header className="header">
-        <div className="container">
-          <div className="header__wrapper">
-            <div className="header__left">
-              <Logo />
-            </div>
-            <nav className="header__nav">
-              <ul className="header__nav-list">
-                <li className="header__nav-item user">
-                  <a className="header__nav-link header__nav-link--profile" href="/">
-                    <div className="header__avatar-wrapper user__avatar-wrapper">
-                    </div>
-                    <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
-                    <span className="header__favorite-count">3</span>
-                  </a>
-                </li>
-                <li className="header__nav-item">
-                  <a className="header__nav-link" href="/">
-                    <span className="header__signout">Sign out</span>
-                  </a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
-      </header>
-
+      <Header />
       <main className="page__main page__main--property">
         <section className="property">
           <div className="property__gallery-container container">
@@ -63,20 +50,9 @@ export default function RoomScreen(): JSX.Element {
                 <h1 className="property__name">
                   Beautiful &amp; luxurious studio at great location
                 </h1>
-                <button className="property__bookmark-button button" type="button">
-                  <svg className="property__bookmark-icon" width="31" height="33">
-                    <use xlinkHref="#icon-bookmark"></use>
-                  </svg>
-                  <span className="visually-hidden">To bookmarks</span>
-                </button>
+                <Bookmark version={BookmarkVersion.Offer} isActive={isFavorite} />
               </div>
-              <div className="property__rating rating">
-                <div className="property__stars rating__stars">
-                  <span style={{ width: '80%' }}></span>
-                  <span className="visually-hidden">Rating</span>
-                </div>
-                <span className="property__rating-value rating__value">4.8</span>
-              </div>
+              <Rating rating={rating} />
               <ul className="property__features">
                 <li className="property__feature property__feature--entire">
                   Apartment
@@ -89,7 +65,7 @@ export default function RoomScreen(): JSX.Element {
                 </li>
               </ul>
               <div className="property__price">
-                <b className="property__price-value">&euro;120</b>
+                <b className="property__price-value">&euro;{price}</b>
                 <span className="property__price-text">&nbsp;night</span>
               </div>
               <div className="property__inside">
