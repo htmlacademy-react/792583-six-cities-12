@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import Logo from '../../components/logo/logo';
+import { LogoVersion } from '../../const';
 
 export default function FavoritesEmptyScreen(): JSX.Element {
   return (
@@ -8,12 +9,12 @@ export default function FavoritesEmptyScreen(): JSX.Element {
         <div className="container">
           <div className="header__wrapper">
             <div className="header__left">
-              <Logo />
+              <Logo version={LogoVersion.Header} />
             </div>
             <nav className="header__nav">
               <ul className="header__nav-list">
                 <li className="header__nav-item user">
-                  <Link className="header__nav-link header__nav-link--profile" to="#">
+                  <Link className="header__nav-link header__nav-link--profile" to="/">
                     <div className="header__avatar-wrapper user__avatar-wrapper">
                     </div>
                     <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
@@ -43,9 +44,7 @@ export default function FavoritesEmptyScreen(): JSX.Element {
         </div>
       </main>
       <footer className="footer">
-        <Link className="footer__logo-link" to="/">
-          <img className="footer__logo" src="img/logo.svg" alt="6 cities logo" width="64" height="33" />
-        </Link>
+        <Logo version={LogoVersion.Footer} />
       </footer>
     </div>
   );

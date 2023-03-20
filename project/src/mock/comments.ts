@@ -3,10 +3,10 @@ import { AVATAR_URL } from './offers';
 
 export const comments: Comments = [
   {
-    comment: 'A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.',
+    comment: 'A11 quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.',
     date: 'Sat Mar 11 2023 20:10:33 GMT+1000 (Владивосток, стандартное время)',
     id: 1,
-    rating: 4,
+    rating: 3,
     user: {
       avatarUrl: `${AVATAR_URL}?rnd=${Math.random()}`,
       id: 2,
@@ -15,7 +15,7 @@ export const comments: Comments = [
     }
   },
   {
-    comment: 'A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.',
+    comment: 'A22 quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.',
     date: 'Sat Mar 11 2023 20:10:33 GMT+1000 (Владивосток, стандартное время)',
     id: 2,
     rating: 4,
@@ -27,10 +27,10 @@ export const comments: Comments = [
     }
   },
   {
-    comment: 'A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.',
+    comment: 'A33 quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.',
     date: 'Sat Mar 11 2023 20:10:33 GMT+1000 (Владивосток, стандартное время)',
     id: 3,
-    rating: 4,
+    rating: 5,
     user: {
       avatarUrl: `${AVATAR_URL}?rnd=${Math.random()}`,
       id: 3,
