@@ -1,4 +1,5 @@
 import Logo from '../../components/logo/logo';
+import { LogoVersion } from '../../const';
 
 export default function LoginScreen(): JSX.Element {
   return (
@@ -7,7 +8,7 @@ export default function LoginScreen(): JSX.Element {
         <div className="container">
           <div className="header__wrapper">
             <div className="header__left">
-              <Logo />
+              <Logo version={LogoVersion.Header} />
             </div>
           </div>
         </div>
