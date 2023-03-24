@@ -55,6 +55,8 @@ export type FilteredListCity = {
 
 export type OfferVersion = typeof OfferCardVersion[keyof typeof OfferCardVersion]
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export type LogoVersion = typeof LogoVersion[keyof typeof LogoVersion]
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export type BookmarkVersion = typeof BookmarkVersion[keyof typeof BookmarkVersion]

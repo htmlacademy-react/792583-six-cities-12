@@ -14,19 +14,18 @@ import FavoritesScreen from '../../pages/favorites-screen/favorites-screen';
 import FavoritesEmptyScreen from '../../pages/favorites-empty-screen/favorites-empty-screen';
 
 type AppScreenProps = {
-  cardsCount: number;
   offers: Offer[];
   comments: Comments;
 }
 
-export default function App({ cardsCount, offers, comments }: AppScreenProps): JSX.Element {
+export default function App({ offers, comments }: AppScreenProps): JSX.Element {
 
   return (
     <HelmetProvider>
       <BrowserRouter>
         <Routes>
           <Route index element={offers.length
-            ? <MainScreen cardsCount={cardsCount} offers={offers} />
+            ? <MainScreen offers={offers} />
             : <MainEmptyScreen />}
           />
           <Route

@@ -3,13 +3,13 @@ import Sort from '../../components/sort/sort';
 import Tabs from '../../components/tabs/tabs';
 import { Offer } from '../../types/offers';
 import Offers from '../../components/offers/offers';
+import Map from '../../components/map/map';
 
 type MainScreenProps = {
-  cardsCount: number;
   offers: Offer[];
 };
 
-export default function MainScreen({ cardsCount, offers }: MainScreenProps): JSX.Element {
+export default function MainScreen({ offers }: MainScreenProps): JSX.Element {
   return (
     <div className="page page--gray page--main">
       <Header />
@@ -27,7 +27,10 @@ export default function MainScreen({ cardsCount, offers }: MainScreenProps): JSX
               </div>
             </section>
             <div className="cities__right-section">
-              <section className="cities__map map"></section>
+              <section className='cities__map map'>
+                <Map offers={offers} />
+              </section>
+
             </div>
           </div>
         </div>

@@ -12,7 +12,6 @@ import PropertyHost from '../property-host/property-host';
 import Reviews from '../reviews/reviews';
 import InsideList from '../inside-list/inside-list';
 
-
 type PropertyProps = {
   offer: Offer;
   comments: Comments;
@@ -56,7 +55,7 @@ export default function Property({ offer, comments, authorizationStatus }: Prope
           <Reviews comments={comments} isAuthorized={isAuthorized} />
         </div>
       </div>
-      <section className="property__map map"></section>
+      {/* <MapContainer offers={offers} block={Block.Property} /> */}
     </section>
   );
 }
