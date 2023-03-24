@@ -13,6 +13,7 @@ import PropertyHost from '../../components/property-host/property-host';
 import { Navigate, useParams } from 'react-router-dom';
 import Offers from '../../components/offers/offers';
 import Reviews from '../../components/reviews/reviews';
+import Map from '../../components/map/map';
 
 type RoomScreenProps = {
   offers: Offer[];
@@ -64,7 +65,9 @@ export default function RoomScreen({ offers, comments, authorizationStatus }: Ro
               <Reviews comments={comments} isAuthorized={isAuthorized} />
             </div>
           </div>
-          <section className="property__map map"></section>
+          <section style={{ height: 500 }} className="property__map map">
+            <Map offers={offers.filter((item) => item.id !== Number(id)).slice(0, 3)} />
+          </section>
         </section>
         <div className="container">
           <section className="near-places places">
@@ -75,6 +78,6 @@ export default function RoomScreen({ offers, comments, authorizationStatus }: Ro
           </section>
         </div>
       </main>
-    </div>
+    </div >
   );
 }
