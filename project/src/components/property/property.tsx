@@ -55,7 +55,6 @@ export default function Property({ offer, comments, authorizationStatus }: Prope
           <Reviews comments={comments} isAuthorized={isAuthorized} />
         </div>
       </div>
-      {/* <MapContainer offers={offers} block={Block.Property} /> */}
     </section>
   );
 }
