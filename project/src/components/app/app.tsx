@@ -1,7 +1,6 @@
 import { Route, BrowserRouter, Routes } from 'react-router-dom';
 import MainScreen from '../../pages/main-screen/main-screen';
 import LoginScreen from '../../pages/login-screen/login-screen';
-// import RoomNotLoggedScreen from '../../pages/room-not-logged-screen/room-not-logged-screen';
 import RoomScreen from '../../pages/room-screen/room-screen';
 import NotFoundScreen from '../../pages/not-found-screen/not-found-screen';
 import { AppRoute, AuthorizationStatus } from '../../const';
@@ -25,7 +24,7 @@ export default function App({ offers, comments }: AppScreenProps): JSX.Element {
       <BrowserRouter>
         <Routes>
           <Route index element={offers.length
-            ? <MainScreen offers={offers} />
+            ? <MainScreen />
             : <MainEmptyScreen />}
           />
           <Route
@@ -46,7 +45,6 @@ export default function App({ offers, comments }: AppScreenProps): JSX.Element {
             path={AppRoute.Room}
             element={
               <RoomScreen
-                offers={offers}
                 comments={comments}
                 authorizationStatus={AuthorizationStatus.Auth}
               />

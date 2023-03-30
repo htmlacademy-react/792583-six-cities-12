@@ -5,7 +5,6 @@ import PremiumMark from '../../components/premium-mark/premium-mark';
 import Rating from '../../components/rating/rating';
 import { AppRoute, AuthorizationStatus, BookmarkVersion } from '../../const';
 import { Comments } from '../../types/comments';
-import { Offer } from '../../types/offers';
 import { Block } from '../../const';
 import InsideList from '../../components/inside-list/inside-list';
 import Price from '../../components/price/price';
@@ -14,14 +13,16 @@ import { Navigate, useParams } from 'react-router-dom';
 import Offers from '../../components/offers/offers';
 import Reviews from '../../components/reviews/reviews';
 import Map from '../../components/map/map';
+import { useAppSelector } from '../../hooks';
 
 type RoomScreenProps = {
-  offers: Offer[];
   comments: Comments;
   authorizationStatus: AuthorizationStatus;
 };
 
-export default function RoomScreen({ offers, comments, authorizationStatus }: RoomScreenProps): JSX.Element {
+export default function RoomScreen({ comments, authorizationStatus }: RoomScreenProps): JSX.Element {
+  const offers = useAppSelector((state) => state.offers);
+  // const selectedOffers = useAppSelector((state) => state.rentalOffers);
   const isAuthorized = authorizationStatus === AuthorizationStatus.Auth;
   const { id } = useParams();
   const offer = offers.find((item) => item.id === Number(id));
@@ -73,7 +74,7 @@ export default function RoomScreen({ offers, comments, authorizationStatus }: Ro
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <div className="near-places__list places__list">
-              <Offers offers={offers.filter((item) => item.id !== Number(id)).slice(0, 3)} />
+              <Offers />
             </div>
           </section>
         </div>

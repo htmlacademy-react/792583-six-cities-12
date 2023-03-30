@@ -40,6 +40,13 @@ export enum Block {
   Footer = 'footer'
 }
 
+export enum SortType {
+  Popular = 'Popular',
+  LowPrice = 'Price: low to high',
+  HightPrice = 'Price: high to low',
+  Rating = 'Top rated first'
+}
+
 export const OfferCardVersion = {
   Cities: {
     block: Block.Cities,
