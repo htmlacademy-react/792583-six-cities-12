@@ -234,11 +234,11 @@ export const offersMock: Offer[] = [
     bedrooms: 5,
     city: {
       location: {
-        latitude: 52.370216,
-        longitude: 4.895168,
+        latitude: 48.511216,
+        longitude: 2.205568,
         zoom: 10
       },
-      name: 'Brussels'
+      name: 'Paris'
     },
     description: 'A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.',
     goods: [
@@ -277,9 +277,9 @@ export const offersMock: Offer[] = [
     isFavorite: false,
     isPremium: false,
     location: {
-      latitude: 52.35514938496378,
-      longitude: 4.673877537499948,
-      zoom: 8
+      latitude: 48.511216,
+      longitude: 2.205568,
+      zoom: 10
     },
     maxAdults: 4,
     previewImage: 'https://12.react.pages.academy/static/hotel/4.jpg',
