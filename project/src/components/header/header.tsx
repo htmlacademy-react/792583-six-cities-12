@@ -1,7 +1,11 @@
 import Logo from '../logo/logo';
 import { LogoVersion } from '../../const';
+import { logoutAction } from '../../store/api-actions';
+import { Link } from 'react-router-dom';
+import { useAppDispatch } from '../../hooks';
 
 export default function Header(): JSX.Element {
+  const dispatch = useAppDispatch();
   return (
     <header className="header">
       <div className="container">
@@ -20,9 +24,14 @@ export default function Header(): JSX.Element {
                 </a>
               </li>
               <li className="header__nav-item">
-                <a className="header__nav-link" href="/">
+                <Link className="header__nav-link" to="/"
+                  onClick={(evt) => {
+                    evt.preventDefault();
+                    dispatch(logoutAction());
+                  }}
+                >
                   <span className="header__signout">Sign out</span>
-                </a>
+                </Link>
               </li>
             </ul>
           </nav>

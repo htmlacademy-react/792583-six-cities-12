@@ -14,6 +14,7 @@ import Offers from '../../components/offers/offers';
 import Reviews from '../../components/reviews/reviews';
 import Map from '../../components/map/map';
 import { useAppSelector } from '../../hooks';
+import { ucFirst } from '../../utils';
 
 type RoomScreenProps = {
   comments: Comments;
@@ -48,7 +49,7 @@ export default function RoomScreen({ comments, authorizationStatus }: RoomScreen
               <Rating block={Block.Property} rating={rating} />
               <ul className="property__features">
                 <li className="property__feature property__feature--entire">
-                  {type}
+                  {ucFirst(type)}
                 </li>
                 <li className="property__feature property__feature--bedrooms">
                   {bedrooms} Bedrooms
