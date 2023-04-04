@@ -4,7 +4,6 @@ import Header from '../../components/header/header';
 import PremiumMark from '../../components/premium-mark/premium-mark';
 import Rating from '../../components/rating/rating';
 import { AppRoute, AuthorizationStatus, BookmarkVersion } from '../../const';
-import { Comments } from '../../types/comments';
 import { Block } from '../../const';
 import InsideList from '../../components/inside-list/inside-list';
 import Price from '../../components/price/price';
@@ -16,13 +15,10 @@ import Map from '../../components/map/map';
 import { useAppSelector } from '../../hooks';
 import { ucFirst } from '../../utils';
 
-type RoomScreenProps = {
-  comments: Comments;
-  authorizationStatus: AuthorizationStatus;
-};
-
-export default function RoomScreen({ comments, authorizationStatus }: RoomScreenProps): JSX.Element {
+export default function RoomScreen(): JSX.Element {
   const offers = useAppSelector((state) => state.offers);
+  const comments = useAppSelector((state) => state.comments);
+  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
   // const selectedOffers = useAppSelector((state) => state.rentalOffers);
   const isAuthorized = authorizationStatus === AuthorizationStatus.Auth;
   const { id } = useParams();
