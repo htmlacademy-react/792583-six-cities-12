@@ -4,7 +4,6 @@ import Header from '../../components/header/header';
 import PremiumMark from '../../components/premium-mark/premium-mark';
 import Rating from '../../components/rating/rating';
 import { AppRoute, AuthorizationStatus, BookmarkVersion } from '../../const';
-import { Comments } from '../../types/comments';
 import { Block } from '../../const';
 import InsideList from '../../components/inside-list/inside-list';
 import Price from '../../components/price/price';
@@ -14,14 +13,12 @@ import Offers from '../../components/offers/offers';
 import Reviews from '../../components/reviews/reviews';
 import Map from '../../components/map/map';
 import { useAppSelector } from '../../hooks';
+import { ucFirst } from '../../utils';
 
-type RoomScreenProps = {
-  comments: Comments;
-  authorizationStatus: AuthorizationStatus;
-};
-
-export default function RoomScreen({ comments, authorizationStatus }: RoomScreenProps): JSX.Element {
+export default function RoomScreen(): JSX.Element {
   const offers = useAppSelector((state) => state.offers);
+  const comments = useAppSelector((state) => state.comments);
+  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
   // const selectedOffers = useAppSelector((state) => state.rentalOffers);
   const isAuthorized = authorizationStatus === AuthorizationStatus.Auth;
   const { id } = useParams();
@@ -48,7 +45,7 @@ export default function RoomScreen({ comments, authorizationStatus }: RoomScreen
               <Rating block={Block.Property} rating={rating} />
               <ul className="property__features">
                 <li className="property__feature property__feature--entire">
-                  {type}
+                  {ucFirst(type)}
                 </li>
                 <li className="property__feature property__feature--bedrooms">
                   {bedrooms} Bedrooms

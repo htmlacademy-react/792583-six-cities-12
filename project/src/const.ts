@@ -7,6 +7,7 @@ export const URL_MARKER_DEFAULT =
 export const URL_MARKER_CURRENT =
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/demo/interactive-map/main-pin.svg';
 
+
 export enum AppRoute {
   Main = '/',
   Login = '/login',
@@ -45,6 +46,13 @@ export enum SortType {
   LowPrice = 'Price: low to high',
   HightPrice = 'Price: high to low',
   Rating = 'Top rated first'
+}
+
+export enum APIRoute {
+  Offers = '/hotels',
+  Comments = '/comments',
+  Login = '/login',
+  Logout = '/logout'
 }
 
 export const OfferCardVersion = {
@@ -104,3 +112,4 @@ export const BookmarkVersion = {
     }
   }
 };
+
