@@ -1,5 +1,7 @@
 import { City, RATING_STARS_COUNT } from './const';
 import { FilteredListCity, Offer } from './types/offers';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const adaptRatingForRendering = (rating: number) => rating * 100 / RATING_STARS_COUNT;
 
@@ -27,3 +29,12 @@ export const filterOffersCity = (offers: Offer[]) =>
   }, []);
 
 export const sortListCityAlphabetically = (a: FilteredListCity, b: FilteredListCity) => a.city.localeCompare(b.city);
+
+export function arrayRandCity(arr : City[]) :string {
+  const rand = Math.floor(Math.random() * arr.length);
+  return arr[rand];
+}
+
+export const showError = (text: string) => toast(text);
+
+
