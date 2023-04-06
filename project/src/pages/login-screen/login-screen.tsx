@@ -1,17 +1,21 @@
 import Logo from '../../components/logo/logo';
-import { LogoVersion } from '../../const';
+import { AppRoute, AuthorizationStatus, City, LogoVersion } from '../../const';
 import { useRef, FormEvent } from 'react';
 // import { useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { loginAction } from '../../store/api-actions';
 import { AuthData } from '../../types/auth-data';
 // import { AppRoute } from '../../const';
+import { arrayRandCity } from '../../utils';
+import { Link, Navigate } from 'react-router-dom';
 
 export default function LoginScreen(): JSX.Element {
   const loginRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useAppDispatch();
-  // const navigate = useNavigate();
+  const authorizationStatus = useAppSelector(
+    (state) => state.authorizationStatus
+  );
   const onSubmit = (authData: AuthData) => {
     dispatch(loginAction(authData));
   };
@@ -24,6 +28,9 @@ export default function LoginScreen(): JSX.Element {
       });
     }
   };
+  if (authorizationStatus === AuthorizationStatus.Auth) {
+    return <Navigate to={AppRoute.Main} />;
+  }
 
   return (
     <div className="page page--gray page--login">
@@ -41,29 +48,48 @@ export default function LoginScreen(): JSX.Element {
         <div className="page__login-container container">
           <section className="login">
             <h1 className="login__title">Sign in</h1>
-            <form className="login__form form" action="#" method="post"
+            <form
+              className="login__form form"
+              action="#"
+              method="post"
               onSubmit={handleSubmit}
             >
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">E-mail</label>
-                <input className="login__input form__input" type="email" name="email" placeholder="Email"
-                  ref={loginRef} required
+                <input
+                  className="login__input form__input"
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                  ref={loginRef}
+                  required
                 />
               </div>
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">Password</label>
-                <input className="login__input form__input" type="password" name="password" placeholder="Password"
-                  ref={passwordRef} required
+                <input
+                  className="login__input form__input"
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  ref={passwordRef}
+                  pattern="^(\S*\s){0}\S*$"
+                  required
                 />
               </div>
-              <button className="login__submit form__submit button" type="submit">Sign in</button>
+              <button
+                className="login__submit form__submit button"
+                type="submit"
+              >
+                Sign in
+              </button>
             </form>
           </section>
           <section className="locations locations--login locations--current">
             <div className="locations__item">
-              <a className="locations__item-link" href="/">
-                <span>Amsterdam</span>
-              </a>
+              <Link className="locations__item-link" to={AppRoute.Main}>
+                <span>{arrayRandCity(Object.values(City))}</span>
+              </Link>
             </div>
           </section>
         </div>

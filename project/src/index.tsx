@@ -11,7 +11,7 @@ store.dispatch(fetchOfferAction());
 store.dispatch(checkAuthAction());
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement,
+  document.getElementById('root') as HTMLElement
 );
 
 root.render(
@@ -20,5 +20,5 @@ root.render(
       <ToastContainer />
       <App />
     </Provider>
-  </React.StrictMode>,
+  </React.StrictMode>
 );
