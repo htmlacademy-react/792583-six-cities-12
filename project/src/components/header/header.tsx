@@ -4,7 +4,6 @@ import { logoutAction } from '../../store/api-actions';
 import { Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import HeaderSignIn from './header-sign-in/header-sign-in';
-import { setUser } from '../../store/action';
 
 export default function Header(): JSX.Element {
   const authorizationStatus = useAppSelector(
@@ -12,8 +11,9 @@ export default function Header(): JSX.Element {
   );
   const offers = useAppSelector((state) => state.offers);
   const favoriteOffers = offers.filter((offer) => offer.isFavorite === true);
+  const userName = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
-  // console.log(favoriteOffers);
+
   return (
     <header className="header">
       <div className="container">
@@ -31,7 +31,7 @@ export default function Header(): JSX.Element {
                   >
                     <div className="header__avatar-wrapper user__avatar-wrapper"></div>
                     <span className="header__user-name user__name">
-                      {setUser.name}
+                      {userName}
                     </span>
                     <span className="header__favorite-count">
                       {favoriteOffers.length}

@@ -22,7 +22,7 @@ export default function App(): JSX.Element {
     (state) => state.isOffersDataLoading
   );
   const offers = useAppSelector((state) => state.offers);
-  // const comments = useAppSelector((state) => state.comments);
+
   if (
     authorizationStatus === AuthorizationStatus.Unknown ||
     isOffersDataLoading

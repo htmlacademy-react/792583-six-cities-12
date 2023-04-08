@@ -35,7 +35,7 @@ export default function MainScreen(): JSX.Element {
                 </b>
                 <Sort />
                 <div className="cities__places-list places__list tabs__content">
-                  <Offers /* offers={offers} */ />
+                  <Offers offers={offers} />
                 </div>
               </section>
               <div className="cities__right-section">

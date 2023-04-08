@@ -5,9 +5,13 @@ import { useAppSelector } from '../../hooks';
 import { Offer } from '../../types/offers';
 import { SortType } from '../../const';
 
-export default function Offers(): JSX.Element {
+type OffersProps = {
+  offers: Offer[];
+};
+
+export default function Offers({ offers }: OffersProps): JSX.Element {
   const location = useAppSelector((state) => state.location);
-  const offers = useAppSelector((state) => state.offers);
+  // const offers = useAppSelector((state) => state.offers);
   const selectedOffers = offers.filter((offer) => offer.city.name === location);
   const [, setActiveCard] = useState<number | null>(null);
   const sortType = useAppSelector((state) => state.sortType);
@@ -27,7 +31,14 @@ export default function Offers(): JSX.Element {
 
   return (
     <>
-      {selectedOffers.map((offer) => <OfferCard onMouseEnter={setActiveCard} key={offer.id} offer={offer} version={OfferCardVersion.Offer} />)}
+      {selectedOffers.map((offer) => (
+        <OfferCard
+          onMouseEnter={setActiveCard}
+          key={offer.id}
+          offer={offer}
+          version={OfferCardVersion.Offer}
+        />
+      ))}
     </>
   );
 }

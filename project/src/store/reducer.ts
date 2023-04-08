@@ -3,7 +3,7 @@ import { AuthorizationStatus, City, SortType } from '../const';
 import { Comment } from '../types/comments';
 import { Offer } from '../types/offers';
 import { loadOffers, changeLocation, listOfRentalOffers, changeSort, requireAuthorization, loadComments, setOffersDataLoadingStatus, setUser } from './action';
-import { UserData } from '../types/user-data';
+// import { UserData } from '../types/user-data';
 
 type InitialState = {
   offers: Offer[];
@@ -13,7 +13,7 @@ type InitialState = {
   authorizationStatus: AuthorizationStatus;
   comments: Comment[];
   isOffersDataLoading: boolean;
-  user: UserData | null;
+  user: string | null;
 };
 
 const initialState: InitialState = {
