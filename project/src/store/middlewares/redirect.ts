@@ -1,17 +1,15 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { browserHistory } from '../../browser-history';
 import { Middleware } from 'redux';
-import { reducer } from '../reducer';
+import { rootReducer } from '..';
 
-type Reducer = ReturnType<typeof reducer>;
+type Reducer = ReturnType<typeof rootReducer>;
 
 export const redirect: Middleware<unknown, Reducer> =
-  (_store) =>
-    (next) =>
-      (action: PayloadAction<string>) => {
-        if (action.type === 'login/redirectToRoute') {
-          browserHistory.push(action.payload);
-        }
+  (_store) => (next) => (action: PayloadAction<string>) => {
+    if (action.type === 'user/redirectToRoute') {
+      browserHistory.push(action.payload);
+    }
 
-        return next(action);
-      };
+    return next(action);
+  };

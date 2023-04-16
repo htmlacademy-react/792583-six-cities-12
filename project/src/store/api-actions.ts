@@ -1,115 +1,110 @@
 import { AxiosInstance } from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AppDispatch, State } from '../types/state';
-import { Offer } from '../types/offers';
-import {
-  loadOffers,
-  loadComments,
-  requireAuthorization,
-  setOffersDataLoadingStatus,
-  setUser,
-  redirectToRoute,
-} from './action';
+import { Offer, Offers } from '../types/offers';
 import { saveToken, dropToken } from '../services/token';
-import { APIRoute, AppRoute, AuthorizationStatus } from '../const';
-import { Comment } from '../types/comments';
+import { APIRoute } from '../const';
+import { Comments } from '../types/comments';
 import { UserData } from '../types/user-data';
 import { AuthData } from '../types/auth-data';
 import { showError } from '../utils';
-
+// import { useAppDispatch } from '../hooks';
+// const dispatch = useAppDispatch();
 type ThunkConfig = {
   state: State;
   dispatch: AppDispatch;
   extra: AxiosInstance;
 };
 
-export const fetchOfferAction = createAsyncThunk<
-  void,
-  undefined,
-  {
-    dispatch: AppDispatch;
-    state: State;
-    extra: AxiosInstance;
-  }
->('data/fetchOffers', async (_arg, { dispatch, extra: api }) => {
-  dispatch(setOffersDataLoadingStatus(true));
-  try {
-    const { data } = await api.get<Offer[]>(APIRoute.Offers);
-    dispatch(setOffersDataLoadingStatus(false));
-    dispatch(loadOffers(data));
-  } catch {
-    showError('Ошибка при загрузке данных');
-  }
-});
+type FavoritePostStatus = {
+  id: number;
+  status: number;
+};
 
-export const fetchCommentAction = createAsyncThunk<
-  void,
+export const fetchOffersAction = createAsyncThunk<
+  Offers,
   undefined,
   ThunkConfig
->('data/fetchComment', async (hotelId, { dispatch, extra: api }) => {
-  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-  const { data } = await api.get<Comment[]>(`${APIRoute.Comments}/${hotelId}`);
-  dispatch(loadComments(data));
-});
-
-export const checkAuthAction = createAsyncThunk<
-  void,
-  undefined,
-  {
-    dispatch: AppDispatch;
-    state: State;
-    extra: AxiosInstance;
-  }
->('user/checkAuth', async (_arg, { dispatch, extra: api }) => {
+>('data/fetchOffers', async (_arg, { dispatch, extra: api }) => {
   try {
-    const {
-      data: { email },
-    } = await api.get<UserData>(APIRoute.Login);
-    dispatch(requireAuthorization(AuthorizationStatus.Auth));
-    dispatch(setUser(email));
-    dispatch(redirectToRoute(AppRoute.Main));
-  } catch {
-    dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
+    const { data: offers } = await api.get<Offers>(APIRoute.Offers);
+    return offers;
+  } catch (error) {
+    showError('Ошибка при загрузке данных');
+    throw error;
   }
 });
 
-export const loginAction = createAsyncThunk<
-  void,
-  AuthData,
-  {
-    dispatch: AppDispatch;
-    state: State;
-    extra: AxiosInstance;
+export const fetchOffersFavoriteAction = createAsyncThunk<
+  Offers,
+  undefined,
+  ThunkConfig
+>('data/fetchOffersFavorite', async (_arg, { dispatch, extra: api }) => {
+  try {
+    const { data } = await api.get<Offers>(APIRoute.Favorite);
+    return data;
+  } catch (error) {
+    showError('Ошибка при загрузке избранных отелей');
+    throw error;
   }
->(
+});
+
+export const setFavoriteAction = createAsyncThunk<
+  Offer,
+  FavoritePostStatus,
+  ThunkConfig
+>('data/setFavorite', async ({ id, status }, { dispatch, extra: api }) => {
+  try {
+    const { data } = await api.post<Offer>(
+      `${APIRoute.Favorite}/${id}/${status}`
+    );
+    return data;
+  } catch (error) {
+    showError('Ошибка при отправке избранного отеля');
+    throw error;
+  }
+});
+
+export const fetchCommentsAction = createAsyncThunk<
+  Comments,
+  number,
+  ThunkConfig
+>('data/fetchComment', async (hotelId, { dispatch, extra: api }) => {
+  const { data } = await api.get<Comments>(`${APIRoute.Comments}/${hotelId}`);
+  return data;
+});
+
+export const checkAuthAction = createAsyncThunk<void, undefined, ThunkConfig>(
+  'user/checkAuthAction',
+  async (_arg, { dispatch, extra: api }) => {
+    await api.get<UserData>(APIRoute.Login);
+  }
+);
+
+export const loginAction = createAsyncThunk<UserData, AuthData, ThunkConfig>(
   'user/login',
-  async ({ login: email, password }, { dispatch, extra: api }) => {
+  async ({ email, password }, { dispatch, extra: api }) => {
     try {
-      const {
-        data: { token },
-      } = await api.post<UserData>(APIRoute.Login, { email, password });
-      saveToken(token);
-      dispatch(requireAuthorization(AuthorizationStatus.Auth));
-    } catch {
+      const { data } = await api.post<UserData>(APIRoute.Login, {
+        email,
+        password,
+      });
+      saveToken(data.token);
+      return data;
+    } catch (error) {
       showError('Ошибка в логине или пароле');
+      throw error;
     }
   }
 );
 
-export const logoutAction = createAsyncThunk<
-  void,
-  undefined,
-  {
-    dispatch: AppDispatch;
-    state: State;
-    extra: AxiosInstance;
+export const logoutAction = createAsyncThunk<void, undefined, ThunkConfig>(
+  'user/logout',
+  async (_arg, { dispatch, extra: api }) => {
+    await api.delete(APIRoute.Logout);
+    dropToken();
   }
->('user/logout', async (_arg, { dispatch, extra: api }) => {
-  await api.delete(APIRoute.Logout);
-  dropToken();
-  dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
-  dispatch(setUser(null));
-});
+);
 
 export const fetchOffer = createAsyncThunk<Offer, number, ThunkConfig>(
   'fetchOffer',

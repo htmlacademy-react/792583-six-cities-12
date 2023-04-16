@@ -8,14 +8,13 @@ import { AuthData } from '../../types/auth-data';
 // import { AppRoute } from '../../const';
 import { arrayRandCity } from '../../utils';
 import { Link, Navigate } from 'react-router-dom';
+import { getAuthorizationStatus } from '../../store/user-process/selectors';
 
 export default function LoginScreen(): JSX.Element {
   const loginRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useAppDispatch();
-  const authorizationStatus = useAppSelector(
-    (state) => state.authorizationStatus
-  );
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const onSubmit = (authData: AuthData) => {
     dispatch(loginAction(authData));
   };
@@ -23,7 +22,7 @@ export default function LoginScreen(): JSX.Element {
     evt.preventDefault();
     if (loginRef.current !== null && passwordRef.current !== null) {
       onSubmit({
-        login: loginRef.current.value,
+        email: loginRef.current.value,
         password: passwordRef.current.value,
       });
     }

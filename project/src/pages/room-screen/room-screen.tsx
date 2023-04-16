@@ -14,16 +14,16 @@ import Reviews from '../../components/reviews/reviews';
 import Map from '../../components/map/map';
 import { useAppSelector } from '../../hooks';
 import { ucFirst } from '../../utils';
+import { getComments, getOffers } from '../../store/data-process/selectors';
+import { getAuthorizationStatus } from '../../store/user-process/selectors';
 
 export default function RoomScreen(): JSX.Element {
-  const offers = useAppSelector((state) => state.offers);
+  const offers = useAppSelector(getOffers);
   const nearOffers = offers
     .filter((item) => item.id !== Number(id))
     .slice(0, 3);
-  const comments = useAppSelector((state) => state.comments);
-  const authorizationStatus = useAppSelector(
-    (state) => state.authorizationStatus
-  );
+  const comments = useAppSelector(getComments);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
   // const selectedOffers = useAppSelector((state) => state.rentalOffers);
   const isAuthorized = authorizationStatus === AuthorizationStatus.Auth;
   const { id } = useParams();

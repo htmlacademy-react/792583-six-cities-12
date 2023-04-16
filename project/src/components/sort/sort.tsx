@@ -1,18 +1,19 @@
 import classNames from 'classnames';
 import { useState } from 'react';
 import { SortType } from '../../const';
-import { useAppSelector, useAppDispatch } from '../../hooks';
-import { changeSort } from '../../store/action';
+import { useAppSelector } from '../../hooks';
+import { getSortType } from '../../store/main-process/selectors';
 
 export default function Sort(): JSX.Element {
   const [isSortOpen, setSortState] = useState(false);
-  const dispatch = useAppDispatch();
-  const sortType = useAppSelector((state) => state.sortType);
+  // const dispatch = useAppDispatch();
+  const sortType = useAppSelector(getSortType);
 
   return (
     <form className="places__sorting" action="#" method="get">
       <span className="places__sorting-caption">Sort by</span>
-      <span className="places__sorting-type"
+      <span
+        className="places__sorting-type"
         tabIndex={0}
         onClick={() => setSortState(!isSortOpen)}
       >
@@ -21,24 +22,26 @@ export default function Sort(): JSX.Element {
           <use xlinkHref="#icon-arrow-select"></use>
         </svg>
       </span>
-      <ul className={`places__options places__options--custom ${isSortOpen ? 'places__options--opened' : ''}`}>
-        {
-          Object.entries(SortType).map(([, value]) => (
-            <li
-              key={value}
-              className={classNames('places__option', {
-                'places__option--active': value === sortType
-              })}
-              tabIndex={0}
-              onClick={() => {
-                dispatch(changeSort(value));
-                setSortState(!isSortOpen);
-              }}
-            >
-              {value}
-            </li>
-          ))
-        }
+      <ul
+        className={`places__options places__options--custom ${
+          isSortOpen ? 'places__options--opened' : ''
+        }`}
+      >
+        {Object.entries(SortType).map(([, value]) => (
+          <li
+            key={value}
+            className={classNames('places__option', {
+              'places__option--active': value === sortType,
+            })}
+            tabIndex={0}
+            onClick={() => {
+              // dispatch(changeSort(value));
+              // setSortState(!isSortOpen);
+            }}
+          >
+            {value}
+          </li>
+        ))}
       </ul>
     </form>
   );

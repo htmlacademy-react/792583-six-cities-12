@@ -7,7 +7,7 @@ import { AppRoute } from '../../const';
 import PrivateRoute from '../private-route/private-route';
 import { HelmetProvider } from 'react-helmet-async';
 import FavoritesScreen from '../../pages/favorites-screen/favorites-screen';
-import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useAppSelector } from '../../hooks';
 import HistoryRouter from '../history-route/history-route';
 import { browserHistory } from '../../browser-history';
 import {
@@ -16,13 +16,10 @@ import {
 } from '../../store/data-process/selectors';
 import LoadingScreen from '../../pages/loading-screen/loading-screen';
 import ErrorScreen from '../../pages/error-screen/error-screen';
-import { useEffect } from 'react';
-import { checkAuthAction, fetchOffersAction } from '../../store/api-actions';
 
 export default function App(): JSX.Element {
   const isOffersDataLoading = useAppSelector(getOffersDataLoadingStatus);
   const hasError = useAppSelector(getErrorStatus);
-  const dispatch = useAppDispatch();
 
   if (isOffersDataLoading) {
     return <LoadingScreen />;

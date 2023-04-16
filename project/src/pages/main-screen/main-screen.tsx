@@ -6,12 +6,20 @@ import Map from '../../components/map/map';
 import { useAppSelector } from '../../hooks';
 import MainEmptyScreen from '../main-empty-screen/main-empty-screen';
 import classNames from 'classnames';
+import { getErrorStatus, getOffers } from '../../store/data-process/selectors';
+import { getLocation } from '../../store/main-process/selectors';
+import ErrorScreen from '../error-screen/error-screen';
 
 export default function MainScreen(): JSX.Element {
-  const offers = useAppSelector((state) => state.offers);
-  const location = useAppSelector((state) => state.location);
+  const offers = useAppSelector(getOffers);
+  const location = useAppSelector(getLocation);
   // const rentalOffers = useAppSelector((state) => state.rentalOffers);
   const selectedOffers = offers.filter((offer) => offer.city.name === location);
+  const errorStatus = useAppSelector(getErrorStatus);
+
+  if (errorStatus === true) {
+    return <ErrorScreen />;
+  }
 
   return (
     <div className="page page--gray page--main">

@@ -4,14 +4,16 @@ import { logoutAction } from '../../store/api-actions';
 import { Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import HeaderSignIn from './header-sign-in/header-sign-in';
+import {
+  getAuthorizationStatus,
+  getUserName,
+} from '../../store/user-process/selectors';
+import { getFavoriteOffers } from '../../store/data-process/selectors';
 
 export default function Header(): JSX.Element {
-  const authorizationStatus = useAppSelector(
-    (state) => state.authorizationStatus
-  );
-  const offers = useAppSelector((state) => state.offers);
-  const favoriteOffers = offers.filter((offer) => offer.isFavorite === true);
-  const userName = useAppSelector((state) => state.user);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const favoriteOffers = useAppSelector(getFavoriteOffers);
+  const userName = useAppSelector(getUserName);
   const dispatch = useAppDispatch();
 
   return (

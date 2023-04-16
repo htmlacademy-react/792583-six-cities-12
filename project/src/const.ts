@@ -1,18 +1,24 @@
 export const RATING_STARS_COUNT = 5;
 export const OFFER_IMG_GALLERY_COUNT = 6;
-export const RATING_TITLES = ['perfect', 'good', 'not bad', 'badly', 'terribly'];
+export const RATING_TITLES = [
+  'perfect',
+  'good',
+  'not bad',
+  'badly',
+  'terribly',
+];
 export const URL_MARKER_DEFAULT =
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/demo/interactive-map/pin.svg';
 
 export const URL_MARKER_CURRENT =
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/demo/interactive-map/main-pin.svg';
 
-
 export enum AppRoute {
   Main = '/',
   Login = '/login',
   Favorites = '/favorites',
-  Room = '/offer/:id'
+  Room = '/offer/:id',
+  City = '/:city',
 }
 
 export enum AuthorizationStatus {
@@ -27,7 +33,7 @@ export enum City {
   Brussels = 'Brussels',
   Amsterdam = 'Amsterdam',
   Hamburg = 'Hamburg',
-  Dusseldorf = 'Dusseldorf'
+  Dusseldorf = 'Dusseldorf',
 }
 
 export enum Block {
@@ -38,21 +44,30 @@ export enum Block {
   Cities = 'cities',
   NearPlaces = 'near-places',
   Reviews = 'reviews',
-  Footer = 'footer'
+  Footer = 'footer',
 }
 
 export enum SortType {
   Popular = 'Popular',
   LowPrice = 'Price: low to high',
   HightPrice = 'Price: high to low',
-  Rating = 'Top rated first'
+  Rating = 'Top rated first',
 }
 
 export enum APIRoute {
   Offers = '/hotels',
   Comments = '/comments',
   Login = '/login',
-  Logout = '/logout'
+  Logout = '/logout',
+  Favorite = '/favorite',
+}
+
+export enum NameSpace {
+  User = 'USER',
+  Data = 'DATA',
+  Main = 'MAIN',
+  Favorite = 'FAVORITE',
+  Room = 'ROOM',
 }
 
 export const OfferCardVersion = {
@@ -60,23 +75,23 @@ export const OfferCardVersion = {
     block: Block.Cities,
     imgSize: {
       width: '260',
-      height: '200'
-    }
+      height: '200',
+    },
   },
   Offer: {
     block: Block.NearPlaces,
     imgSize: {
       width: '260',
-      height: '200'
-    }
+      height: '200',
+    },
   },
   Favorites: {
     block: Block.Favorites,
     imgSize: {
       width: '150',
-      height: '110'
-    }
-  }
+      height: '110',
+    },
+  },
 };
 
 export const LogoVersion = {
@@ -84,16 +99,16 @@ export const LogoVersion = {
     block: Block.Footer,
     imgSize: {
       width: '64',
-      height: '33'
-    }
+      height: '33',
+    },
   },
   Header: {
     block: Block.Header,
     imgSize: {
       width: '81',
-      height: '41'
-    }
-  }
+      height: '41',
+    },
+  },
 };
 
 export const BookmarkVersion = {
@@ -101,15 +116,14 @@ export const BookmarkVersion = {
     block: Block.Property,
     imgSize: {
       width: '31',
-      height: '33'
-    }
+      height: '33',
+    },
   },
   Card: {
     block: Block.OfferCard,
     imgSize: {
       width: '18',
-      height: '19'
-    }
-  }
+      height: '19',
+    },
+  },
 };
-
