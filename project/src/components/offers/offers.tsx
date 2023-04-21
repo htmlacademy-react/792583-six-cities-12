@@ -13,6 +13,7 @@ export default function Offers({ offers }: OffersProps): JSX.Element {
   const location = useAppSelector(getLocation);
   const selectedOffers = offers.filter((offer) => offer.city.name === location);
   const sortType = useAppSelector(getSortType);
+
   const changingSort = (array: Offer[], type: string) => {
     switch (type) {
       case SortType.LowPrice:
