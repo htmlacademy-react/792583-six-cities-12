@@ -13,4 +13,17 @@ export type CommentUser = {
   name: string;
 };
 
+export type AuthUser =
+  | (CommentUser & {
+      email: string;
+      token: string;
+    })
+  | null;
+
+export type NewComment = {
+  comment: string;
+  rating: number;
+  id: number;
+};
+
 export type Comments = Comment[];

@@ -1,27 +1,31 @@
 import { Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { changeLocation, listOfRentalOffers } from '../../store/action';
 import classNames from 'classnames';
+import { getLocation } from '../../store/main-process/selectors';
+import { changeLocation } from '../../store/main-process/main-process';
+import { City } from '../../const';
 
 type LocationsItemProps = {
-  location: string;
-}
+  location: City;
+};
 
-export default function LocationsItem({ location }: LocationsItemProps): JSX.Element {
-  const offers = useAppSelector((state) => state.offers);
+export default function LocationsItem({
+  location,
+}: LocationsItemProps): JSX.Element {
   const dispatch = useAppDispatch();
-  const selectedLocation = useAppSelector((state) => state.location);
-  const selectedOffers = offers.filter((offer) => offer.city.name === selectedLocation);
+  const selectedLocation = useAppSelector(getLocation);
 
   return (
     <li className="locations__item">
-      <Link className={classNames('locations__item-link tabs__item', {
-        'tabs__item--active': location === selectedLocation
-      })} to="#/" onClick={(evt) => {
-        evt.preventDefault();
-        dispatch(changeLocation(location));
-        dispatch(listOfRentalOffers(selectedOffers));
-      }}
+      <Link
+        className={classNames('locations__item-link tabs__item', {
+          'tabs__item--active': location === selectedLocation,
+        })}
+        to="#/"
+        onClick={(evt) => {
+          evt.preventDefault();
+          dispatch(changeLocation(location));
+        }}
       >
         <span>{location}</span>
       </Link>

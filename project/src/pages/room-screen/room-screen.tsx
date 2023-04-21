@@ -12,21 +12,51 @@ import { Navigate, useParams } from 'react-router-dom';
 import Offers from '../../components/offers/offers';
 import Reviews from '../../components/reviews/reviews';
 import Map from '../../components/map/map';
-import { useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { ucFirst } from '../../utils';
+import {
+  getComments,
+  getNearbyOffers,
+  getOffers,
+} from '../../store/data-process/selectors';
+import { getAuthorizationStatus } from '../../store/user-process/selectors';
+import { useEffect } from 'react';
+import {
+  fetchCommentsAction,
+  fetchNearbyOfferAction,
+  fetchOffer,
+} from '../../store/api-actions';
 
 export default function RoomScreen(): JSX.Element {
-  const offers = useAppSelector((state) => state.offers);
-  const comments = useAppSelector((state) => state.comments);
-  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
-  // const selectedOffers = useAppSelector((state) => state.rentalOffers);
+  const id = Number(useParams().id);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchOffer(id));
+    dispatch(fetchNearbyOfferAction(id));
+    dispatch(fetchCommentsAction(id));
+  }, [dispatch]);
+
+  const offers = useAppSelector(getOffers);
+  const nearOffers = useAppSelector(getNearbyOffers);
+  const comments = useAppSelector(getComments);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const isAuthorized = authorizationStatus === AuthorizationStatus.Auth;
-  const { id } = useParams();
   const offer = offers.find((item) => item.id === Number(id));
   if (!offer) {
-    return (<Navigate to={AppRoute.Main} />);
+    return <Navigate to={AppRoute.Main} />;
   }
-  const { bedrooms, goods, images, isFavorite, maxAdults, price, rating, title, type } = offer;
+  const {
+    bedrooms,
+    goods,
+    images,
+    isFavorite,
+    maxAdults,
+    price,
+    rating,
+    title,
+    type,
+  } = offer;
   return (
     <div className="page">
       <Header />
@@ -37,10 +67,12 @@ export default function RoomScreen(): JSX.Element {
             <div className="property__wrapper">
               <PremiumMark block={Block.Property} />
               <div className="property__name-wrapper">
-                <h1 className="property__name">
-                  {title}
-                </h1>
-                <Bookmark version={BookmarkVersion.Offer} isActive={isFavorite} />
+                <h1 className="property__name">{title}</h1>
+                <Bookmark
+                  version={BookmarkVersion.Offer}
+                  isFavorite={isFavorite}
+                  offerId={offer.id}
+                />
               </div>
               <Rating block={Block.Property} rating={rating} />
               <ul className="property__features">
@@ -60,22 +92,28 @@ export default function RoomScreen(): JSX.Element {
                 <InsideList goods={goods} />
               </div>
               <PropertyHost offer={offer} />
-              <Reviews comments={comments} isAuthorized={isAuthorized} />
+              <Reviews
+                comments={comments}
+                isAuthorized={isAuthorized}
+                offerId={offer.id}
+              />
             </div>
           </div>
           <section style={{ height: 500 }} className="property__map map">
-            <Map offers={offers.filter((item) => item.id !== Number(id)).slice(0, 3)} />
+            <Map offers={nearOffers} />
           </section>
         </section>
         <div className="container">
           <section className="near-places places">
-            <h2 className="near-places__title">Other places in the neighbourhood</h2>
+            <h2 className="near-places__title">
+              Other places in the neighbourhood
+            </h2>
             <div className="near-places__list places__list">
-              <Offers />
+              <Offers offers={nearOffers} />
             </div>
           </section>
         </div>
       </main>
-    </div >
+    </div>
   );
 }

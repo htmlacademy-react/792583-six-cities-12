@@ -19,6 +19,8 @@ export type Offer = {
   type: string;
 };
 
+export type Offers = Offer[];
+
 export type OfferLocation = {
   latitude: number;
   longitude: number;
@@ -46,18 +48,21 @@ export type BlockType = {
   NearPlaces: string;
   Reviews: string;
   Footer: string;
-}
+};
 
 export type FilteredListCity = {
   cityOffers: Offer[];
   city: string;
-}
+};
 
-export type OfferVersion = typeof OfferCardVersion[keyof typeof OfferCardVersion]
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export type LogoVersion = typeof LogoVersion[keyof typeof LogoVersion]
+export type OfferVersion =
+  typeof OfferCardVersion[keyof typeof OfferCardVersion];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export type BookmarkVersion = typeof BookmarkVersion[keyof typeof BookmarkVersion]
+export type LogoVersion = typeof LogoVersion[keyof typeof LogoVersion];
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export type BookmarkVersion =
+  typeof BookmarkVersion[keyof typeof BookmarkVersion];
+
+export type IdOffer = number | null;

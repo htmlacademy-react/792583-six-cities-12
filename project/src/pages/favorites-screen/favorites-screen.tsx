@@ -1,18 +1,17 @@
 import Favorites from '../../components/favorites/favorites';
 import Footer from '../../components/footer/footer';
 import Header from '../../components/header/header';
-// import { useAppSelector } from '../../hooks';
-// import { useMemo } from 'react';
+import { useAppSelector } from '../../hooks';
+import { getFavoriteOffers } from '../../store/data-process/selectors';
+import FavoritesEmptyScreen from '../favorites-empty-screen/favorites-empty-screen';
 
 export default function FavoritesScreen(): JSX.Element {
-  // const offers = useAppSelector((state) => state.offers);
-  // const filterOffers = useMemo(() => offers.filter(({ isFavorite }) => isFavorite), [offers]);
-  // const favoriteOffers = offers.filter((offer) => offer.isFavorite === true);
+  const favoriteOffers = useAppSelector(getFavoriteOffers);
 
   return (
     <div className="page">
       <Header />
-      <Favorites />
+      {favoriteOffers.length ? <Favorites /> : <FavoritesEmptyScreen />}
       <Footer />
     </div>
   );
