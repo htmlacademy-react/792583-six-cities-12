@@ -6,9 +6,9 @@ export type UserData = {
 
 export type UserAuth = {
   id: number;
-  isPro: boolean;
-  name: string;
-  avatarUrl: string;
+  isPro?: boolean;
+  name?: string;
+  avatarUrl?: string;
   email: string;
   token: string;
-}
+};

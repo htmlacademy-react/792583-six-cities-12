@@ -1,19 +1,19 @@
 import Logo from '../logo/logo';
-import { AuthorizationStatus, LogoVersion } from '../../const';
+import { AppRoute, AuthorizationStatus, LogoVersion } from '../../const';
 import { logoutAction } from '../../store/api-actions';
 import { Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import HeaderSignIn from './header-sign-in/header-sign-in';
 import {
   getAuthorizationStatus,
-  getUserName,
+  getUserData,
 } from '../../store/user-process/selectors';
 import { getFavoriteOffers } from '../../store/data-process/selectors';
 
 export default function Header(): JSX.Element {
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const favoriteOffers = useAppSelector(getFavoriteOffers);
-  const userName = useAppSelector(getUserName);
+  const userData = useAppSelector(getUserData);
   const dispatch = useAppDispatch();
 
   return (
@@ -27,18 +27,26 @@ export default function Header(): JSX.Element {
             <nav className="header__nav">
               <ul className="header__nav-list">
                 <li className="header__nav-item user">
-                  <a
+                  <Link
                     className="header__nav-link header__nav-link--profile"
-                    href="/"
+                    to={AppRoute.Favorites}
                   >
-                    <div className="header__avatar-wrapper user__avatar-wrapper"></div>
+                    <div className="header__avatar-wrapper user__avatar-wrapper">
+                      <img
+                        src={userData?.avatarUrl ?? './img/avatar.svg'}
+                        width="20"
+                        height="20"
+                        alt="user avatar"
+                        style={{ borderRadius: '50%' }}
+                      />
+                    </div>
                     <span className="header__user-name user__name">
-                      {userName}
+                      {userData?.email}
                     </span>
                     <span className="header__favorite-count">
                       {favoriteOffers.length}
                     </span>
-                  </a>
+                  </Link>
                 </li>
                 <li className="header__nav-item">
                   <Link

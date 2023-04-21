@@ -1,20 +1,19 @@
 import { Link } from 'react-router-dom';
-import { /* useAppDispatch, */ useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import classNames from 'classnames';
-// import { getOffers } from '../../store/data-process/selectors';
 import { getLocation } from '../../store/main-process/selectors';
+import { changeLocation } from '../../store/main-process/main-process';
+import { City } from '../../const';
 
 type LocationsItemProps = {
-  location: string;
+  location: City;
 };
 
 export default function LocationsItem({
   location,
 }: LocationsItemProps): JSX.Element {
-  // const offers = useAppSelector(getOffers);
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
   const selectedLocation = useAppSelector(getLocation);
-  // const selectedOffers = offers.filter((offer) => offer.city.name === selectedLocation);
 
   return (
     <li className="locations__item">
@@ -25,8 +24,7 @@ export default function LocationsItem({
         to="#/"
         onClick={(evt) => {
           evt.preventDefault();
-          // dispatch(changeLocation(location));
-          // dispatch(listOfRentalOffers(selectedOffers));
+          dispatch(changeLocation(location));
         }}
       >
         <span>{location}</span>

@@ -16,11 +16,25 @@ type PropertyProps = {
   offer: Offer;
   comments: Comments;
   authorizationStatus: AuthorizationStatus;
-}
+};
 
-export default function Property({ offer, comments, authorizationStatus }: PropertyProps): JSX.Element {
+export default function Property({
+  offer,
+  comments,
+  authorizationStatus,
+}: PropertyProps): JSX.Element {
   const isAuthorized = authorizationStatus === AuthorizationStatus.Auth;
-  const { images, type, title, isFavorite, rating, bedrooms, maxAdults, price, goods } = offer;
+  const {
+    images,
+    type,
+    title,
+    isFavorite,
+    rating,
+    bedrooms,
+    maxAdults,
+    price,
+    goods,
+  } = offer;
 
   return (
     <section className="property">
@@ -29,10 +43,12 @@ export default function Property({ offer, comments, authorizationStatus }: Prope
         <div className="property__wrapper">
           <PremiumMark block={Block.Property} />
           <div className="property__name-wrapper">
-            <h1 className="property__name">
-              {title}
-            </h1>
-            <Bookmark version={BookmarkVersion.Offer} isActive={isFavorite} />
+            <h1 className="property__name">{title}</h1>
+            <Bookmark
+              version={BookmarkVersion.Offer}
+              isFavorite={isFavorite}
+              offerId={offer.id}
+            />
           </div>
           <Rating block={Block.Property} rating={rating} />
           <ul className="property__features">
@@ -52,7 +68,11 @@ export default function Property({ offer, comments, authorizationStatus }: Prope
             <InsideList goods={goods} />
           </div>
           <PropertyHost offer={offer} />
-          <Reviews comments={comments} isAuthorized={isAuthorized} />
+          <Reviews
+            comments={comments}
+            isAuthorized={isAuthorized}
+            offerId={offer.id}
+          />
         </div>
       </div>
     </section>

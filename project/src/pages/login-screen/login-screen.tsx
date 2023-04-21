@@ -1,11 +1,9 @@
 import Logo from '../../components/logo/logo';
 import { AppRoute, AuthorizationStatus, City, LogoVersion } from '../../const';
 import { useRef, FormEvent } from 'react';
-// import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { loginAction } from '../../store/api-actions';
 import { AuthData } from '../../types/auth-data';
-// import { AppRoute } from '../../const';
 import { arrayRandCity } from '../../utils';
 import { Link, Navigate } from 'react-router-dom';
 import { getAuthorizationStatus } from '../../store/user-process/selectors';
@@ -15,6 +13,11 @@ export default function LoginScreen(): JSX.Element {
   const passwordRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useAppDispatch();
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
+
+  if (authorizationStatus === AuthorizationStatus.Auth) {
+    return <Navigate to={AppRoute.Main} />;
+  }
+
   const onSubmit = (authData: AuthData) => {
     dispatch(loginAction(authData));
   };
@@ -27,9 +30,6 @@ export default function LoginScreen(): JSX.Element {
       });
     }
   };
-  if (authorizationStatus === AuthorizationStatus.Auth) {
-    return <Navigate to={AppRoute.Main} />;
-  }
 
   return (
     <div className="page page--gray page--login">

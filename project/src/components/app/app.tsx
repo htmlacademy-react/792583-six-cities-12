@@ -9,17 +9,19 @@ import { HelmetProvider } from 'react-helmet-async';
 import FavoritesScreen from '../../pages/favorites-screen/favorites-screen';
 import { useAppSelector } from '../../hooks';
 import HistoryRouter from '../history-route/history-route';
-import { browserHistory } from '../../browser-history';
 import {
   getErrorStatus,
   getOffersDataLoadingStatus,
 } from '../../store/data-process/selectors';
 import LoadingScreen from '../../pages/loading-screen/loading-screen';
 import ErrorScreen from '../../pages/error-screen/error-screen';
+import { getAuthorizationStatus } from '../../store/user-process/selectors';
+import { browserHistory } from '../../browser-history';
 
 export default function App(): JSX.Element {
   const isOffersDataLoading = useAppSelector(getOffersDataLoadingStatus);
   const hasError = useAppSelector(getErrorStatus);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
 
   if (isOffersDataLoading) {
     return <LoadingScreen />;
@@ -36,7 +38,7 @@ export default function App(): JSX.Element {
           <Route
             path={AppRoute.Favorites}
             element={
-              <PrivateRoute>
+              <PrivateRoute authorizationStatus={authorizationStatus}>
                 <FavoritesScreen />
               </PrivateRoute>
             }

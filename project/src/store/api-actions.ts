@@ -4,12 +4,11 @@ import { AppDispatch, State } from '../types/state';
 import { Offer, Offers } from '../types/offers';
 import { saveToken, dropToken } from '../services/token';
 import { APIRoute } from '../const';
-import { Comments } from '../types/comments';
-import { UserData } from '../types/user-data';
+import { Comments, NewComment } from '../types/comments';
+import { UserAuth, UserData } from '../types/user-data';
 import { AuthData } from '../types/auth-data';
 import { showError } from '../utils';
-// import { useAppDispatch } from '../hooks';
-// const dispatch = useAppDispatch();
+
 type ThunkConfig = {
   state: State;
   dispatch: AppDispatch;
@@ -41,8 +40,8 @@ export const fetchOffersFavoriteAction = createAsyncThunk<
   ThunkConfig
 >('data/fetchOffersFavorite', async (_arg, { dispatch, extra: api }) => {
   try {
-    const { data } = await api.get<Offers>(APIRoute.Favorite);
-    return data;
+    const { data: favorites } = await api.get<Offers>(APIRoute.Favorite);
+    return favorites;
   } catch (error) {
     showError('Ошибка при загрузке избранных отелей');
     throw error;
@@ -74,12 +73,31 @@ export const fetchCommentsAction = createAsyncThunk<
   return data;
 });
 
-export const checkAuthAction = createAsyncThunk<void, undefined, ThunkConfig>(
-  'user/checkAuthAction',
-  async (_arg, { dispatch, extra: api }) => {
-    await api.get<UserData>(APIRoute.Login);
+export const fetchNearbyOfferAction = createAsyncThunk<
+  Offers,
+  number,
+  ThunkConfig
+>('data/fetchNearOffer', async (hotelId, { dispatch, extra: api }) => {
+  const { data } = await api.get<Offers>(
+    `${APIRoute.Offers}/${hotelId}/nearby`
+  );
+  return data;
+});
+
+export const checkAuthAction = createAsyncThunk<
+  UserAuth,
+  undefined,
+  ThunkConfig
+>('user/checkAuthAction', async (_arg, { dispatch, extra: api }) => {
+  try {
+    const { data } = await api.get<UserAuth>(APIRoute.Login);
+    dispatch(fetchOffersFavoriteAction());
+    return data;
+  } catch (error) {
+    showError('Ошибка в проверке авторизации');
+    throw error;
   }
-);
+});
 
 export const loginAction = createAsyncThunk<UserData, AuthData, ThunkConfig>(
   'user/login',
@@ -90,6 +108,7 @@ export const loginAction = createAsyncThunk<UserData, AuthData, ThunkConfig>(
         password,
       });
       saveToken(data.token);
+      dispatch(fetchOffersFavoriteAction());
       return data;
     } catch (error) {
       showError('Ошибка в логине или пароле');
@@ -114,9 +133,29 @@ export const fetchOffer = createAsyncThunk<Offer, number, ThunkConfig>(
         `${APIRoute.Offers}/${offerId}`
       );
       return offer;
-    } catch (e) {
+    } catch (error) {
       showError('Отель не загружен!');
-      throw e;
+      throw error;
+    }
+  }
+);
+
+export const sendCommentAction = createAsyncThunk<
+  Comments,
+  NewComment,
+  ThunkConfig
+>(
+  'data/sendComment',
+  async ({ rating, comment, id }, { dispatch, extra: api }) => {
+    try {
+      const { data } = await api.post<Comments>(`${APIRoute.Comments}/${id}`, {
+        rating,
+        comment,
+      });
+      return data;
+    } catch (error) {
+      showError('Massage send failed!');
+      throw error;
     }
   }
 );

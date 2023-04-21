@@ -1,13 +1,17 @@
 import classNames from 'classnames';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { SortType } from '../../const';
-import { useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getSortType } from '../../store/main-process/selectors';
+import useOnClickOutside from '../../hooks/useOnClickOutcide';
+import { changeSort } from '../../store/main-process/main-process';
 
 export default function Sort(): JSX.Element {
   const [isSortOpen, setSortState] = useState(false);
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
   const sortType = useAppSelector(getSortType);
+  const refOne = useRef<HTMLDivElement>(null);
+  useOnClickOutside(refOne, () => setSortState(false));
 
   return (
     <form className="places__sorting" action="#" method="get">
@@ -16,6 +20,7 @@ export default function Sort(): JSX.Element {
         className="places__sorting-type"
         tabIndex={0}
         onClick={() => setSortState(!isSortOpen)}
+        ref={refOne}
       >
         {sortType}
         <svg className="places__sorting-arrow" width="7" height="4">
@@ -35,8 +40,8 @@ export default function Sort(): JSX.Element {
             })}
             tabIndex={0}
             onClick={() => {
-              // dispatch(changeSort(value));
-              // setSortState(!isSortOpen);
+              dispatch(changeSort(value));
+              setSortState(false);
             }}
           >
             {value}

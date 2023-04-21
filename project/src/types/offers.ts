@@ -64,3 +64,5 @@ export type LogoVersion = typeof LogoVersion[keyof typeof LogoVersion];
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export type BookmarkVersion =
   typeof BookmarkVersion[keyof typeof BookmarkVersion];
+
+export type IdOffer = number | null;

@@ -3,23 +3,33 @@ import Sort from '../../components/sort/sort';
 import LocationsList from '../../components/locations-list/locations-list';
 import Offers from '../../components/offers/offers';
 import Map from '../../components/map/map';
-import { useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import MainEmptyScreen from '../main-empty-screen/main-empty-screen';
 import classNames from 'classnames';
 import { getErrorStatus, getOffers } from '../../store/data-process/selectors';
 import { getLocation } from '../../store/main-process/selectors';
 import ErrorScreen from '../error-screen/error-screen';
+import { useEffect } from 'react';
+import { checkAuthAction, fetchOffersAction } from '../../store/api-actions';
 
 export default function MainScreen(): JSX.Element {
+  const dispatch = useAppDispatch();
   const offers = useAppSelector(getOffers);
   const location = useAppSelector(getLocation);
-  // const rentalOffers = useAppSelector((state) => state.rentalOffers);
   const selectedOffers = offers.filter((offer) => offer.city.name === location);
   const errorStatus = useAppSelector(getErrorStatus);
 
   if (errorStatus === true) {
     return <ErrorScreen />;
   }
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useEffect(() => {
+    if (offers.length) {
+      return;
+    }
+    dispatch(fetchOffersAction());
+    dispatch(checkAuthAction());
+  }, []);
 
   return (
     <div className="page page--gray page--main">

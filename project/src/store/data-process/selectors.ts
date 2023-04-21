@@ -16,3 +16,6 @@ export const getErrorStatus = (state: State): boolean =>
 
 export const getComments = (state: State): Comments =>
   state[NameSpace.Data].comments;
+
+export const getNearbyOffers = (state: State): Offers =>
+  state[NameSpace.Data].nearbyOffers;

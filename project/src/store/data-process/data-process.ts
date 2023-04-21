@@ -4,6 +4,7 @@ import { Offer, Offers } from '../../types/offers';
 import { NameSpace } from '../../const';
 import {
   fetchCommentsAction,
+  fetchNearbyOfferAction,
   fetchOffersAction,
   fetchOffersFavoriteAction,
   setFavoriteAction,
@@ -49,10 +50,13 @@ export const dataProcess = createSlice({
       })
       .addCase(fetchOffersFavoriteAction.fulfilled, (state, action) => {
         state.isOffersDataLoading = false;
-        state.offers = action.payload;
+        state.favorite = action.payload;
       })
       .addCase(fetchOffersFavoriteAction.rejected, (state) => {
         state.hasError = true;
+      })
+      .addCase(fetchNearbyOfferAction.fulfilled, (state, action) => {
+        state.nearbyOffers = action.payload;
       })
       .addCase(fetchCommentsAction.fulfilled, (state, action) => {
         state.comments = action.payload;

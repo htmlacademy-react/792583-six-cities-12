@@ -4,10 +4,10 @@ import { Link } from 'react-router-dom';
 import { useMemo } from 'react';
 import { filterOffersCity, sortListCityAlphabetically } from '../../utils';
 import { useAppSelector } from '../../hooks';
-import { getOffers } from '../../store/data-process/selectors';
+import { getFavoriteOffers } from '../../store/data-process/selectors';
 
 export default function FavoritesList(): JSX.Element {
-  const offers = useAppSelector(getOffers);
+  const offers = useAppSelector(getFavoriteOffers);
   const filteredOffers = useMemo(
     () => filterOffersCity(offers).sort(sortListCityAlphabetically),
     [offers]
