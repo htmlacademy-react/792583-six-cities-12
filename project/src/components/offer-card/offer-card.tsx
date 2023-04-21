@@ -12,17 +12,17 @@ import PremiumMark from '../premium-mark/premium-mark';
 import Price from '../price/price';
 import Rating from '../rating/rating';
 import { generatePath } from 'react-router-dom';
+import { useAppDispatch } from '../../hooks';
+import { selectOffer } from '../../store/main-process/main-process';
 
 type OfferScreenProps = {
   offer: Offer;
   version: OfferVersion;
-  onMouseEnter?: (activeCard: number) => void;
 };
 
 export default function OfferCard({
   offer,
   version,
-  onMouseEnter,
 }: OfferScreenProps): JSX.Element {
   const {
     price,
@@ -36,10 +36,12 @@ export default function OfferCard({
   } = offer;
   const { block, imgSize } = version;
   const isFavoriteVersion = OfferCardVersion.Favorites === version;
+  const dispatch = useAppDispatch();
 
   return (
     <article
-      onMouseEnter={onMouseEnter && (() => onMouseEnter(id))}
+      onMouseEnter={() => dispatch(selectOffer(offer.id))}
+      onMouseLeave={() => dispatch(selectOffer(null))}
       className={`${block}__card place-card`}
     >
       {isPremium && <PremiumMark block={Block.OfferCard} />}
@@ -61,7 +63,11 @@ export default function OfferCard({
       >
         <div className="place-card__price-wrapper">
           <Price block={Block.OfferCard} price={price} />
-          <Bookmark version={BookmarkVersion.Card} isActive={isFavorite} />
+          <Bookmark
+            version={BookmarkVersion.Card}
+            isFavorite={isFavorite}
+            offerId={offer.id}
+          />
         </div>
         <Rating block={Block.OfferCard} rating={rating} />
         <h2 className="place-card__name">

@@ -12,21 +12,36 @@ import { Navigate, useParams } from 'react-router-dom';
 import Offers from '../../components/offers/offers';
 import Reviews from '../../components/reviews/reviews';
 import Map from '../../components/map/map';
-import { useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { ucFirst } from '../../utils';
-import { getComments, getOffers } from '../../store/data-process/selectors';
+import {
+  getComments,
+  getNearbyOffers,
+  getOffers,
+} from '../../store/data-process/selectors';
 import { getAuthorizationStatus } from '../../store/user-process/selectors';
+import { useEffect } from 'react';
+import {
+  fetchCommentsAction,
+  fetchNearbyOfferAction,
+  fetchOffer,
+} from '../../store/api-actions';
 
 export default function RoomScreen(): JSX.Element {
+  const id = Number(useParams().id);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchOffer(id));
+    dispatch(fetchNearbyOfferAction(id));
+    dispatch(fetchCommentsAction(id));
+  }, [dispatch]);
+
   const offers = useAppSelector(getOffers);
-  const nearOffers = offers
-    .filter((item) => item.id !== Number(id))
-    .slice(0, 3);
+  const nearOffers = useAppSelector(getNearbyOffers);
   const comments = useAppSelector(getComments);
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
-  // const selectedOffers = useAppSelector((state) => state.rentalOffers);
   const isAuthorized = authorizationStatus === AuthorizationStatus.Auth;
-  const { id } = useParams();
   const offer = offers.find((item) => item.id === Number(id));
   if (!offer) {
     return <Navigate to={AppRoute.Main} />;
@@ -55,7 +70,8 @@ export default function RoomScreen(): JSX.Element {
                 <h1 className="property__name">{title}</h1>
                 <Bookmark
                   version={BookmarkVersion.Offer}
-                  isActive={isFavorite}
+                  isFavorite={isFavorite}
+                  offerId={offer.id}
                 />
               </div>
               <Rating block={Block.Property} rating={rating} />
@@ -76,15 +92,15 @@ export default function RoomScreen(): JSX.Element {
                 <InsideList goods={goods} />
               </div>
               <PropertyHost offer={offer} />
-              <Reviews comments={comments} isAuthorized={isAuthorized} />
+              <Reviews
+                comments={comments}
+                isAuthorized={isAuthorized}
+                offerId={offer.id}
+              />
             </div>
           </div>
           <section style={{ height: 500 }} className="property__map map">
-            <Map
-              offers={offers
-                .filter((item) => item.id !== Number(id))
-                .slice(0, 3)}
-            />
+            <Map offers={nearOffers} />
           </section>
         </section>
         <div className="container">
