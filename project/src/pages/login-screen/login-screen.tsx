@@ -14,6 +14,11 @@ export default function LoginScreen(): JSX.Element {
   const dispatch = useAppDispatch();
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
 
+  if (authorizationStatus === AuthorizationStatus.Unknown) {
+    if (localStorage.getItem.length) {
+      return <Navigate to={AppRoute.Main} />;
+    }
+  }
   if (authorizationStatus === AuthorizationStatus.Auth) {
     return <Navigate to={AppRoute.Main} />;
   }
