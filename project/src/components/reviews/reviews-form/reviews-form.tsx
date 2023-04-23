@@ -13,12 +13,13 @@ type ReviewFormProps = {
 };
 
 export default function ReviewsForm({ id }: ReviewFormProps): JSX.Element {
+  const dispatch = useAppDispatch();
+
   const initialFormData = {
     rating: 0,
     comment: '',
     id,
   };
-  const dispatch = useAppDispatch();
   const [formData, setFormData] = useState(initialFormData);
   const [isSubmitting, setSubmitting] = useState(false);
 

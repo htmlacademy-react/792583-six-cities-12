@@ -2,6 +2,7 @@ export const RATING_STARS_COUNT = 5;
 export const OFFER_IMG_GALLERY_COUNT = 6;
 export const MIN_COMMENT_LENGTH = 50;
 export const MAX_COMMENT_LENGTH = 300;
+export const MAX_COMMENTS_COUNT = 10;
 export const RATING_TITLES = [
   'perfect',
   'good',

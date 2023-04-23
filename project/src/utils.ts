@@ -1,4 +1,6 @@
+import dayjs from 'dayjs';
 import { City, RATING_STARS_COUNT, SortType } from './const';
+import { Comment } from './types/comments';
 import { FilteredListCity, Offer } from './types/offers';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -56,4 +58,10 @@ export const sortBy = {
     offer2.price - offer1.price,
   [SortType.Rating]: (offer1: Offer, offer2: Offer) =>
     offer2.rating - offer1.rating,
+};
+
+export const sortCommentsByDate = (comment1: Comment, comment2: Comment) => {
+  const dateX = comment1.date;
+  const dateY = comment2.date;
+  return dayjs(dateY).diff(dateX);
 };

@@ -7,6 +7,7 @@ import {
   fetchNearbyOfferAction,
   fetchOffersAction,
   fetchOffersFavoriteAction,
+  sendCommentAction,
   setFavoriteAction,
 } from '../api-actions';
 
@@ -60,6 +61,11 @@ export const dataProcess = createSlice({
       })
       .addCase(fetchCommentsAction.fulfilled, (state, action) => {
         state.comments = action.payload;
+        // state.offers.forEach((offer) => {
+        //   if (offer.id === state.selectedOffer?.id) {
+        //     state.comments = action.payload;
+        //   }
+        // });
       })
       .addCase(setFavoriteAction.fulfilled, (state, action) => {
         if (action.payload.isFavorite) {
@@ -69,6 +75,14 @@ export const dataProcess = createSlice({
             ({ id }) => id !== action.payload.id
           );
         }
+        state.offers.forEach((offer) => {
+          if (offer.id === action.payload.id) {
+            offer.isFavorite = action.payload.isFavorite;
+          }
+        });
+      })
+      .addCase(sendCommentAction.fulfilled, (state, action) => {
+        state.comments = action.payload;
       });
   },
 });

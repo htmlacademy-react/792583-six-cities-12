@@ -30,16 +30,16 @@ import {
 export default function RoomScreen(): JSX.Element {
   const id = Number(useParams().id);
   const dispatch = useAppDispatch();
-
+  const comments = useAppSelector(getComments);
   useEffect(() => {
     dispatch(fetchOffer(id));
     dispatch(fetchNearbyOfferAction(id));
     dispatch(fetchCommentsAction(id));
-  }, [dispatch]);
+  }, [dispatch, id, comments.length]);
 
   const offers = useAppSelector(getOffers);
   const nearOffers = useAppSelector(getNearbyOffers);
-  const comments = useAppSelector(getComments);
+  // const comments = useAppSelector(getComments);
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const isAuthorized = authorizationStatus === AuthorizationStatus.Auth;
   const offer = offers.find((item) => item.id === Number(id));
