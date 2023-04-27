@@ -60,10 +60,12 @@ export default function MapOffer(props: MapOfferProps): JSX.Element {
       };
     }
   }, [map, offers, selectedOffer, cityLocation]);
+
   //иначе currentMark будет ругаться на lat, lng
   if (selectedOffer === null) {
     return <NotFoundScreen />;
   }
+
   //не получилось без eslint-disable
   useEffect(() => {
     if (map) {
