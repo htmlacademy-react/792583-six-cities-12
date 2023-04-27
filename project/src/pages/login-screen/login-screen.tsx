@@ -77,7 +77,8 @@ export default function LoginScreen(): JSX.Element {
                   name="password"
                   placeholder="Password"
                   ref={passwordRef}
-                  pattern="^(\S*\s){0}\S*$"
+                  title="Введите минимум 1 латинскую букву и 1 цифру"
+                  pattern="^(?=.*[a-zA-Z])(?=.*\d)[^\s].+"
                   required
                 />
               </div>

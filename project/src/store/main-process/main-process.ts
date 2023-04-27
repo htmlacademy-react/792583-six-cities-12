@@ -1,16 +1,18 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { City, NameSpace, SortType } from '../../const';
-import { IdOffer } from '../../types/offers';
+import { IdOffer, Offer } from '../../types/offers';
 
 type MainProcess = {
   location: City;
-  selectedOffer: IdOffer | null;
+  selectedOfferId: IdOffer | null;
+  currentOffer: Offer | undefined;
   sortType: SortType;
 };
 
 const initialState: MainProcess = {
   location: City.Paris,
-  selectedOffer: null,
+  selectedOfferId: null,
+  currentOffer: undefined,
   sortType: SortType.Popular,
 };
 
@@ -21,8 +23,11 @@ export const mainProcess = createSlice({
     changeLocation: (state, action: PayloadAction<City>) => {
       state.location = action.payload;
     },
-    selectOffer: (state, action: PayloadAction<IdOffer | null>) => {
-      state.selectedOffer = action.payload;
+    selectedOfferId: (state, action: PayloadAction<IdOffer | null>) => {
+      state.selectedOfferId = action.payload;
+    },
+    selectionOffer: (state, action: PayloadAction<Offer>) => {
+      state.currentOffer = action.payload;
     },
     changeSort: (state, action: PayloadAction<SortType>) => {
       state.sortType = action.payload;
@@ -30,4 +35,5 @@ export const mainProcess = createSlice({
   },
 });
 
-export const { changeLocation, selectOffer, changeSort } = mainProcess.actions;
+export const { changeLocation, selectedOfferId, changeSort, selectionOffer } =
+  mainProcess.actions;

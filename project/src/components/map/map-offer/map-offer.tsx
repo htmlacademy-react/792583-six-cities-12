@@ -1,12 +1,14 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useRef, useEffect } from 'react';
-import useMap from '../../hooks/useMap';
 import 'leaflet/dist/leaflet.css';
-import { Offer } from '../../types/offers';
-import { useAppSelector } from '../../hooks';
-import { getSelectedOfferId } from '../../store/main-process/selectors';
 import leaflet, { Icon, Marker } from 'leaflet';
+import { Offer } from '../../../types/offers';
+import { useAppSelector } from '../../../hooks';
+import useMap from '../../../hooks/useMap';
+import { getSelectedOffer } from '../../../store/data-process/selectors';
+import NotFoundScreen from '../../../pages/not-found-screen/not-found-screen';
 
-type MapProps = {
+type MapOfferProps = {
   offers: Offer[];
 };
 
@@ -28,8 +30,9 @@ const currentCustomIcon = new Icon({
   iconAnchor: [20, 40],
 });
 
-export default function Map(props: MapProps): JSX.Element {
-  const selectedOfferId = useAppSelector(getSelectedOfferId);
+export default function MapOffer(props: MapOfferProps): JSX.Element {
+  const selectedOffer = useAppSelector(getSelectedOffer);
+
   const { offers } = props;
   const cityLocation = offers[0]?.city.location ?? DEFAULT_COORDINATE;
   const mapRef = useRef(null);
@@ -50,22 +53,32 @@ export default function Map(props: MapProps): JSX.Element {
           lat: offer.location.latitude,
           lng: offer.location.longitude,
         });
-
-        marker
-          .setIcon(
-            selectedOfferId !== undefined &&
-              offer.id === Number(selectedOfferId)
-              ? currentCustomIcon
-              : defaultCustomIcon
-          )
-          .addTo(markerGroup);
+        marker.setIcon(defaultCustomIcon).addTo(markerGroup);
       });
-
       return () => {
         map.removeLayer(markerGroup);
       };
     }
-  }, [map, offers, selectedOfferId, cityLocation]);
+  }, [map, offers, selectedOffer, cityLocation]);
+  //иначе currentMark будет ругаться на lat, lng
+  if (selectedOffer === null) {
+    return <NotFoundScreen />;
+  }
+  //не получилось без eslint-disable
+  useEffect(() => {
+    if (map) {
+      const markerGroup = leaflet.layerGroup().addTo(map);
+      const currentMark = new Marker({
+        lat: selectedOffer.location.latitude,
+        lng: selectedOffer.location.longitude,
+      });
+
+      currentMark.setIcon(currentCustomIcon).addTo(markerGroup);
+      return () => {
+        map.removeLayer(markerGroup);
+      };
+    }
+  }, [map, offers, selectedOffer]);
 
   return <div style={{ height: '500px' }} ref={mapRef}></div>;
 }

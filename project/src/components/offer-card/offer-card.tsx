@@ -13,7 +13,10 @@ import Price from '../price/price';
 import Rating from '../rating/rating';
 import { generatePath } from 'react-router-dom';
 import { useAppDispatch } from '../../hooks';
-import { selectOffer } from '../../store/main-process/main-process';
+import {
+  selectedOfferId,
+  selectionOffer,
+} from '../../store/main-process/main-process';
 
 type OfferScreenProps = {
   offer: Offer;
@@ -40,8 +43,9 @@ export default function OfferCard({
 
   return (
     <article
-      onMouseEnter={() => dispatch(selectOffer(offer.id))}
-      onMouseLeave={() => dispatch(selectOffer(null))}
+      onMouseEnter={() => dispatch(selectedOfferId(offer.id))}
+      onMouseLeave={() => dispatch(selectedOfferId(null))}
+      onClick={() => dispatch(selectionOffer(offer))}
       className={`${block}__card place-card`}
     >
       {isPremium && <PremiumMark block={Block.OfferCard} />}

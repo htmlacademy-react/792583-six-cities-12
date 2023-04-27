@@ -9,8 +9,8 @@ import classNames from 'classnames';
 import { getErrorStatus, getOffers } from '../../store/data-process/selectors';
 import { getLocation } from '../../store/main-process/selectors';
 import ErrorScreen from '../error-screen/error-screen';
-import { useEffect } from 'react';
 import { checkAuthAction, fetchOffersAction } from '../../store/api-actions';
+import { useEffect } from 'react';
 
 export default function MainScreen(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -19,17 +19,17 @@ export default function MainScreen(): JSX.Element {
   const selectedOffers = offers.filter((offer) => offer.city.name === location);
   const errorStatus = useAppSelector(getErrorStatus);
 
-  if (errorStatus === true) {
-    return <ErrorScreen />;
-  }
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     if (offers.length) {
       return;
     }
     dispatch(fetchOffersAction());
     dispatch(checkAuthAction());
-  }, []);
+  }, [dispatch, offers]);
+
+  if (errorStatus === true) {
+    return <ErrorScreen />;
+  }
 
   return (
     <div className="page page--gray page--main">

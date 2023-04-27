@@ -11,7 +11,6 @@ import PropertyHost from '../../components/property-host/property-host';
 import { Navigate, useParams } from 'react-router-dom';
 import Offers from '../../components/offers/offers';
 import Reviews from '../../components/reviews/reviews';
-import Map from '../../components/map/map';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { ucFirst } from '../../utils';
 import {
@@ -26,6 +25,7 @@ import {
   fetchNearbyOfferAction,
   fetchOffer,
 } from '../../store/api-actions';
+import MapOffer from '../../components/map/map-offer/map-offer';
 
 export default function RoomScreen(): JSX.Element {
   const id = Number(useParams().id);
@@ -39,13 +39,14 @@ export default function RoomScreen(): JSX.Element {
 
   const offers = useAppSelector(getOffers);
   const nearOffers = useAppSelector(getNearbyOffers);
-  // const comments = useAppSelector(getComments);
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const isAuthorized = authorizationStatus === AuthorizationStatus.Auth;
   const offer = offers.find((item) => item.id === Number(id));
+
   if (!offer) {
     return <Navigate to={AppRoute.Main} />;
   }
+
   const {
     bedrooms,
     goods,
@@ -57,6 +58,7 @@ export default function RoomScreen(): JSX.Element {
     title,
     type,
   } = offer;
+
   return (
     <div className="page">
       <Header />
@@ -95,12 +97,12 @@ export default function RoomScreen(): JSX.Element {
               <Reviews
                 comments={comments}
                 isAuthorized={isAuthorized}
-                offerId={offer.id}
+                offerId={id}
               />
             </div>
           </div>
           <section style={{ height: 500 }} className="property__map map">
-            <Map offers={nearOffers} />
+            <MapOffer offers={nearOffers} />
           </section>
         </section>
         <div className="container">
