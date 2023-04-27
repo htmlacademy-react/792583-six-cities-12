@@ -154,7 +154,7 @@ export const sendCommentAction = createAsyncThunk<
       });
       return data;
     } catch (error) {
-      showError('Massage send failed!');
+      showError('Сообщение не отправлено! Повторите попытку');
       throw error;
     }
   }

@@ -1,6 +1,6 @@
 import { NameSpace } from '../../const';
 import { Comments } from '../../types/comments';
-import { Offers } from '../../types/offers';
+import { Offer, Offers } from '../../types/offers';
 import { State } from '../../types/state';
 
 export const getOffers = (state: State): Offers => state[NameSpace.Data].offers;
@@ -19,3 +19,6 @@ export const getComments = (state: State): Comments =>
 
 export const getNearbyOffers = (state: State): Offers =>
   state[NameSpace.Data].nearbyOffers;
+
+export const getSelectedOffer = (state: State): Offer | null =>
+  state[NameSpace.Data].selectedOffer;

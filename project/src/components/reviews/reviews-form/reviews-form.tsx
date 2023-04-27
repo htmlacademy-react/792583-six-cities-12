@@ -1,4 +1,4 @@
-import { useState, Fragment, ChangeEvent, FormEvent } from 'react';
+import { useState, Fragment, ChangeEvent, FormEvent, useEffect } from 'react';
 import {
   MAX_COMMENT_LENGTH,
   MIN_COMMENT_LENGTH,
@@ -22,7 +22,6 @@ export default function ReviewsForm({ id }: ReviewFormProps): JSX.Element {
   };
   const [formData, setFormData] = useState(initialFormData);
   const [isSubmitting, setSubmitting] = useState(false);
-
   const isSubmitButtonDisabled =
     formData.rating === 0 ||
     formData.comment.length < MIN_COMMENT_LENGTH ||
@@ -35,12 +34,19 @@ export default function ReviewsForm({ id }: ReviewFormProps): JSX.Element {
     setFormData({ ...formData, [name]: value });
   };
 
+  useEffect(() => {formData.id = id;
+  },[formData, id]);
+
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     (async () => {
       evt.preventDefault();
       setSubmitting(true);
 
-      await dispatch(sendCommentAction(formData));
+      await dispatch(sendCommentAction({
+        comment: formData.comment,
+        rating: formData.rating,
+        id: id,
+      }));
 
       setSubmitting(false);
       setFormData(initialFormData);
@@ -92,8 +98,8 @@ export default function ReviewsForm({ id }: ReviewFormProps): JSX.Element {
         name="review"
         placeholder="Tell how was your stay, what you like and what can be improved"
         disabled={isSubmitting}
-        // eslint-disable-next-line react/jsx-closing-tag-location
-      ></textarea>
+      >
+      </textarea>
       <div className="reviews__button-wrapper">
         <p className="reviews__help">
           To submit review please make sure to set{' '}
@@ -105,7 +111,7 @@ export default function ReviewsForm({ id }: ReviewFormProps): JSX.Element {
           type="submit"
           disabled={isSubmitting || isSubmitButtonDisabled}
         >
-          Submit
+          { isSubmitting ? 'Submiting' : 'Submit'}
         </button>
       </div>
     </form>

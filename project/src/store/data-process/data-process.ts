@@ -5,6 +5,7 @@ import { NameSpace } from '../../const';
 import {
   fetchCommentsAction,
   fetchNearbyOfferAction,
+  fetchOffer,
   fetchOffersAction,
   fetchOffersFavoriteAction,
   sendCommentAction,
@@ -61,11 +62,6 @@ export const dataProcess = createSlice({
       })
       .addCase(fetchCommentsAction.fulfilled, (state, action) => {
         state.comments = action.payload;
-        // state.offers.forEach((offer) => {
-        //   if (offer.id === state.selectedOffer?.id) {
-        //     state.comments = action.payload;
-        //   }
-        // });
       })
       .addCase(setFavoriteAction.fulfilled, (state, action) => {
         if (action.payload.isFavorite) {
@@ -80,9 +76,17 @@ export const dataProcess = createSlice({
             offer.isFavorite = action.payload.isFavorite;
           }
         });
+        state.nearbyOffers.forEach((offer) => {
+          if (offer.id === action.payload.id) {
+            offer.isFavorite = action.payload.isFavorite;
+          }
+        });
       })
       .addCase(sendCommentAction.fulfilled, (state, action) => {
         state.comments = action.payload;
+      })
+      .addCase(fetchOffer.fulfilled, (state, action) => {
+        state.selectedOffer = action.payload;
       });
   },
 });
