@@ -1,4 +1,25 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { reducer } from './reducer';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { createAPI } from '../services/api';
+import { redirect } from './middlewares/redirect';
+import { NameSpace } from '../const';
+import { dataProcess } from './data-process/data-process';
+import { userProcess } from './user-process/user-process';
+import { mainProcess } from './main-process/main-process';
 
-export const store = configureStore({ reducer });
+const api = createAPI();
+
+export const rootReducer = combineReducers({
+  [NameSpace.Data]: dataProcess.reducer,
+  [NameSpace.User]: userProcess.reducer,
+  [NameSpace.Main]: mainProcess.reducer,
+});
+
+export const store = configureStore({
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      thunk: {
+        extraArgument: api,
+      },
+    }).concat(redirect),
+});

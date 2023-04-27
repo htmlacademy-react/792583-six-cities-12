@@ -1,61 +1,53 @@
-import { Route, BrowserRouter, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import MainScreen from '../../pages/main-screen/main-screen';
 import LoginScreen from '../../pages/login-screen/login-screen';
 import RoomScreen from '../../pages/room-screen/room-screen';
 import NotFoundScreen from '../../pages/not-found-screen/not-found-screen';
-import { AppRoute, AuthorizationStatus } from '../../const';
+import { AppRoute } from '../../const';
 import PrivateRoute from '../private-route/private-route';
 import { HelmetProvider } from 'react-helmet-async';
-import { Offer } from '../../types/offers';
-import { Comments } from '../../types/comments';
-import MainEmptyScreen from '../../pages/main-empty-screen/main-empty-screen';
 import FavoritesScreen from '../../pages/favorites-screen/favorites-screen';
-import FavoritesEmptyScreen from '../../pages/favorites-empty-screen/favorites-empty-screen';
+import { useAppSelector } from '../../hooks';
+import HistoryRouter from '../history-route/history-route';
+import {
+  getErrorStatus,
+  getOffersDataLoadingStatus,
+} from '../../store/data-process/selectors';
+import LoadingScreen from '../../pages/loading-screen/loading-screen';
+import ErrorScreen from '../../pages/error-screen/error-screen';
+import { getAuthorizationStatus } from '../../store/user-process/selectors';
+import { browserHistory } from '../../browser-history';
 
-type AppScreenProps = {
-  offers: Offer[];
-  comments: Comments;
-}
+export default function App(): JSX.Element {
+  const isOffersDataLoading = useAppSelector(getOffersDataLoadingStatus);
+  const hasError = useAppSelector(getErrorStatus);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
 
-export default function App({ offers, comments }: AppScreenProps): JSX.Element {
+  if (isOffersDataLoading) {
+    return <LoadingScreen />;
+  }
+  if (hasError) {
+    return <ErrorScreen />;
+  }
 
   return (
     <HelmetProvider>
-      <BrowserRouter>
+      <HistoryRouter history={browserHistory}>
         <Routes>
-          <Route index element={offers.length
-            ? <MainScreen />
-            : <MainEmptyScreen />}
-          />
+          <Route index element={<MainScreen />} />
           <Route
             path={AppRoute.Favorites}
             element={
-              <PrivateRoute authorizationStatus={AuthorizationStatus.Auth}>
-                {offers.length
-                  ? <FavoritesScreen offers={offers} />
-                  : <FavoritesEmptyScreen />}
+              <PrivateRoute authorizationStatus={authorizationStatus}>
+                <FavoritesScreen />
               </PrivateRoute>
             }
           />
-          <Route
-            path={AppRoute.Login}
-            element={<LoginScreen />}
-          />
-          <Route
-            path={AppRoute.Room}
-            element={
-              <RoomScreen
-                comments={comments}
-                authorizationStatus={AuthorizationStatus.Auth}
-              />
-            }
-          />
-          <Route
-            path={'*'}
-            element={<NotFoundScreen />}
-          />
+          <Route path={AppRoute.Login} element={<LoginScreen />} />
+          <Route path={AppRoute.Room} element={<RoomScreen />} />
+          <Route path={'*'} element={<NotFoundScreen />} />
         </Routes>
-      </BrowserRouter>
+      </HistoryRouter>
     </HelmetProvider>
   );
 }

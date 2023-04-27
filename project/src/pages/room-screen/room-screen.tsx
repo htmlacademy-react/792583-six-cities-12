@@ -4,7 +4,6 @@ import Header from '../../components/header/header';
 import PremiumMark from '../../components/premium-mark/premium-mark';
 import Rating from '../../components/rating/rating';
 import { AppRoute, AuthorizationStatus, BookmarkVersion } from '../../const';
-import { Comments } from '../../types/comments';
 import { Block } from '../../const';
 import InsideList from '../../components/inside-list/inside-list';
 import Price from '../../components/price/price';
@@ -12,24 +11,54 @@ import PropertyHost from '../../components/property-host/property-host';
 import { Navigate, useParams } from 'react-router-dom';
 import Offers from '../../components/offers/offers';
 import Reviews from '../../components/reviews/reviews';
-import Map from '../../components/map/map';
-import { useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { ucFirst } from '../../utils';
+import {
+  getComments,
+  getNearbyOffers,
+  getOffers,
+} from '../../store/data-process/selectors';
+import { getAuthorizationStatus } from '../../store/user-process/selectors';
+import { useEffect } from 'react';
+import {
+  fetchCommentsAction,
+  fetchNearbyOfferAction,
+  fetchOffer,
+} from '../../store/api-actions';
+import MapOffer from '../../components/map/map-offer/map-offer';
 
-type RoomScreenProps = {
-  comments: Comments;
-  authorizationStatus: AuthorizationStatus;
-};
+export default function RoomScreen(): JSX.Element {
+  const id = Number(useParams().id);
+  const dispatch = useAppDispatch();
+  const comments = useAppSelector(getComments);
+  useEffect(() => {
+    dispatch(fetchOffer(id));
+    dispatch(fetchNearbyOfferAction(id));
+    dispatch(fetchCommentsAction(id));
+  }, [dispatch, id, comments.length]);
 
-export default function RoomScreen({ comments, authorizationStatus }: RoomScreenProps): JSX.Element {
-  const offers = useAppSelector((state) => state.offers);
-  // const selectedOffers = useAppSelector((state) => state.rentalOffers);
+  const offers = useAppSelector(getOffers);
+  const nearOffers = useAppSelector(getNearbyOffers);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const isAuthorized = authorizationStatus === AuthorizationStatus.Auth;
-  const { id } = useParams();
   const offer = offers.find((item) => item.id === Number(id));
+
   if (!offer) {
-    return (<Navigate to={AppRoute.Main} />);
+    return <Navigate to={AppRoute.Main} />;
   }
-  const { bedrooms, goods, images, isFavorite, maxAdults, price, rating, title, type } = offer;
+
+  const {
+    bedrooms,
+    goods,
+    images,
+    isFavorite,
+    maxAdults,
+    price,
+    rating,
+    title,
+    type,
+  } = offer;
+
   return (
     <div className="page">
       <Header />
@@ -40,15 +69,17 @@ export default function RoomScreen({ comments, authorizationStatus }: RoomScreen
             <div className="property__wrapper">
               <PremiumMark block={Block.Property} />
               <div className="property__name-wrapper">
-                <h1 className="property__name">
-                  {title}
-                </h1>
-                <Bookmark version={BookmarkVersion.Offer} isActive={isFavorite} />
+                <h1 className="property__name">{title}</h1>
+                <Bookmark
+                  version={BookmarkVersion.Offer}
+                  isFavorite={isFavorite}
+                  offerId={offer.id}
+                />
               </div>
               <Rating block={Block.Property} rating={rating} />
               <ul className="property__features">
                 <li className="property__feature property__feature--entire">
-                  {type}
+                  {ucFirst(type)}
                 </li>
                 <li className="property__feature property__feature--bedrooms">
                   {bedrooms} Bedrooms
@@ -63,22 +94,28 @@ export default function RoomScreen({ comments, authorizationStatus }: RoomScreen
                 <InsideList goods={goods} />
               </div>
               <PropertyHost offer={offer} />
-              <Reviews comments={comments} isAuthorized={isAuthorized} />
+              <Reviews
+                comments={comments}
+                isAuthorized={isAuthorized}
+                offerId={id}
+              />
             </div>
           </div>
           <section style={{ height: 500 }} className="property__map map">
-            <Map offers={offers.filter((item) => item.id !== Number(id)).slice(0, 3)} />
+            <MapOffer offers={nearOffers} />
           </section>
         </section>
         <div className="container">
           <section className="near-places places">
-            <h2 className="near-places__title">Other places in the neighbourhood</h2>
+            <h2 className="near-places__title">
+              Other places in the neighbourhood
+            </h2>
             <div className="near-places__list places__list">
-              <Offers />
+              <Offers offers={nearOffers} />
             </div>
           </section>
         </div>
       </main>
-    </div >
+    </div>
   );
 }
