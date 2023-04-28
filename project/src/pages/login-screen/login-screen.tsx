@@ -4,15 +4,18 @@ import { useRef, FormEvent } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { loginAction } from '../../store/api-actions';
 import { AuthData } from '../../types/auth-data';
-import { arrayRandCity } from '../../utils';
+import { getRandomInt } from '../../utils';
 import { Link, Navigate } from 'react-router-dom';
 import { getAuthorizationStatus } from '../../store/user-process/selectors';
+import { changeLocation } from '../../store/main-process/main-process';
 
 export default function LoginScreen(): JSX.Element {
   const loginRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useAppDispatch();
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const randomIndex = getRandomInt(Object.keys(City).length);
+  const randomCity = Object.values(City)[randomIndex];
 
   if (authorizationStatus === AuthorizationStatus.Unknown) {
     if (localStorage.getItem.length) {
@@ -92,8 +95,8 @@ export default function LoginScreen(): JSX.Element {
           </section>
           <section className="locations locations--login locations--current">
             <div className="locations__item">
-              <Link className="locations__item-link" to={AppRoute.Main}>
-                <span>{arrayRandCity(Object.values(City))}</span>
+              <Link className="locations__item-link" to={AppRoute.Main} onClick={() => dispatch(changeLocation(randomCity))}>
+                <span>{randomCity}</span>
               </Link>
             </div>
           </section>

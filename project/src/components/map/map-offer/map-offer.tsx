@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import { useRef, useEffect } from 'react';
 import 'leaflet/dist/leaflet.css';
 import leaflet, { Icon, Marker } from 'leaflet';
@@ -6,7 +5,6 @@ import { Offer } from '../../../types/offers';
 import { useAppSelector } from '../../../hooks';
 import useMap from '../../../hooks/useMap';
 import { getSelectedOffer } from '../../../store/data-process/selectors';
-import NotFoundScreen from '../../../pages/not-found-screen/not-found-screen';
 
 type MapOfferProps = {
   offers: Offer[];
@@ -61,18 +59,12 @@ export default function MapOffer(props: MapOfferProps): JSX.Element {
     }
   }, [map, offers, selectedOffer, cityLocation]);
 
-  //иначе currentMark будет ругаться на lat, lng
-  if (selectedOffer === null) {
-    return <NotFoundScreen />;
-  }
-
-  //не получилось без eslint-disable
   useEffect(() => {
     if (map) {
       const markerGroup = leaflet.layerGroup().addTo(map);
       const currentMark = new Marker({
-        lat: selectedOffer.location.latitude,
-        lng: selectedOffer.location.longitude,
+        lat: selectedOffer!.location.latitude,
+        lng: selectedOffer!.location.longitude,
       });
 
       currentMark.setIcon(currentCustomIcon).addTo(markerGroup);

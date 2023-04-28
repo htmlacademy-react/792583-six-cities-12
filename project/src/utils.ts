@@ -49,6 +49,12 @@ export function arrayRandCity(arr: City[]): string {
   return arr[rand];
 }
 
+export function getRandomInt(max: number): number {
+  const min = 0;
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
 export const showError = (text: string) => toast(text);
 
 export const sortBy = {
