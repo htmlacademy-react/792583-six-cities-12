@@ -101,12 +101,12 @@ export default function RoomScreen(): JSX.Element {
               />
             </div>
           </div>
-          <section style={{ height: 500 }} className="property__map map">
+          <section style={{ height: 500, maxWidth: 900, margin: '0px auto' }} className="property__map map">
             <MapOffer offers={nearOffers} currentOffer={offer}/>
           </section>
         </section>
         <div className="container">
-          <section className="near-places places">
+          <section className="near-places places" style={{marginTop: '30px'}}>
             <h2 className="near-places__title">
               Other places in the neighbourhood
             </h2>

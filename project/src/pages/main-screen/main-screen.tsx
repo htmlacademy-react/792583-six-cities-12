@@ -7,10 +7,12 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import MainEmptyScreen from '../main-empty-screen/main-empty-screen';
 import classNames from 'classnames';
 import { getErrorStatus, getOffers } from '../../store/data-process/selectors';
-import { getLocation } from '../../store/main-process/selectors';
+import { getLocation, getSortType } from '../../store/main-process/selectors';
 import ErrorScreen from '../error-screen/error-screen';
 import { checkAuthAction, fetchOffersAction } from '../../store/api-actions';
 import { useEffect } from 'react';
+import { Offer } from '../../types/offers';
+import { SortType } from '../../const';
 
 export default function MainScreen(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -18,6 +20,21 @@ export default function MainScreen(): JSX.Element {
   const location = useAppSelector(getLocation);
   const selectedOffers = offers.filter((offer) => offer.city.name === location);
   const errorStatus = useAppSelector(getErrorStatus);
+
+  const sortType = useAppSelector(getSortType);
+  const changingSort = (array: Offer[], type: string) => {
+    switch (type) {
+      case SortType.LowPrice:
+        return array.sort((a, b) => a.price - b.price);
+      case SortType.HightPrice:
+        return array.sort((b, a) => a.price - b.price);
+      case SortType.Rating:
+        return array.sort((b, a) => a.rating - b.rating);
+      default:
+        return array;
+    }
+  };
+  changingSort(selectedOffers, sortType);
 
   useEffect(() => {
     if (offers.length) {
@@ -53,7 +70,7 @@ export default function MainScreen(): JSX.Element {
                 </b>
                 <Sort />
                 <div className="cities__places-list places__list tabs__content">
-                  <Offers offers={offers} />
+                  <Offers offers={selectedOffers} />
                 </div>
               </section>
               <div className="cities__right-section">
