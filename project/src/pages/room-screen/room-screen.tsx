@@ -31,17 +31,17 @@ export default function RoomScreen(): JSX.Element {
   const id = Number(useParams().id);
   const dispatch = useAppDispatch();
   const comments = useAppSelector(getComments);
-  useEffect(() => {
-    dispatch(fetchOffer(id));
-    dispatch(fetchNearbyOfferAction(id));
-    dispatch(fetchCommentsAction(id));
-  }, [dispatch, id, comments.length]);
-
   const offers = useAppSelector(getOffers);
   const nearOffers = useAppSelector(getNearbyOffers);
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const isAuthorized = authorizationStatus === AuthorizationStatus.Auth;
   const offer = offers.find((item) => item.id === Number(id));
+
+  useEffect(() => {
+    dispatch(fetchOffer(id));
+    dispatch(fetchNearbyOfferAction(id));
+    dispatch(fetchCommentsAction(id));
+  }, [dispatch, id, comments.length]);
 
   if (!offer) {
     return <Navigate to={AppRoute.Main} />;
@@ -101,12 +101,12 @@ export default function RoomScreen(): JSX.Element {
               />
             </div>
           </div>
-          <section style={{ height: 500 }} className="property__map map">
-            <MapOffer offers={nearOffers} />
+          <section style={{ height: 500, maxWidth: 900, margin: '0px auto' }} className="property__map map">
+            <MapOffer offers={nearOffers} currentOffer={offer}/>
           </section>
         </section>
         <div className="container">
-          <section className="near-places places">
+          <section className="near-places places" style={{marginTop: '30px'}}>
             <h2 className="near-places__title">
               Other places in the neighbourhood
             </h2>
