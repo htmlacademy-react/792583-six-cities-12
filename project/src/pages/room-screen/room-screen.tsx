@@ -31,17 +31,17 @@ export default function RoomScreen(): JSX.Element {
   const id = Number(useParams().id);
   const dispatch = useAppDispatch();
   const comments = useAppSelector(getComments);
-  useEffect(() => {
-    dispatch(fetchOffer(id));
-    dispatch(fetchNearbyOfferAction(id));
-    dispatch(fetchCommentsAction(id));
-  }, [dispatch, id, comments.length]);
-
   const offers = useAppSelector(getOffers);
   const nearOffers = useAppSelector(getNearbyOffers);
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const isAuthorized = authorizationStatus === AuthorizationStatus.Auth;
   const offer = offers.find((item) => item.id === Number(id));
+
+  useEffect(() => {
+    dispatch(fetchOffer(id));
+    dispatch(fetchNearbyOfferAction(id));
+    dispatch(fetchCommentsAction(id));
+  }, [dispatch, id, comments.length]);
 
   if (!offer) {
     return <Navigate to={AppRoute.Main} />;
@@ -102,7 +102,7 @@ export default function RoomScreen(): JSX.Element {
             </div>
           </div>
           <section style={{ height: 500 }} className="property__map map">
-            <MapOffer offers={nearOffers} />
+            <MapOffer offers={nearOffers} currentOffer={offer}/>
           </section>
         </section>
         <div className="container">

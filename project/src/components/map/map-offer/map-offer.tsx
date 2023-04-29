@@ -2,12 +2,11 @@ import { useRef, useEffect } from 'react';
 import 'leaflet/dist/leaflet.css';
 import leaflet, { Icon, Marker } from 'leaflet';
 import { Offer } from '../../../types/offers';
-import { useAppSelector } from '../../../hooks';
 import useMap from '../../../hooks/useMap';
-import { getSelectedOffer } from '../../../store/data-process/selectors';
 
 type MapOfferProps = {
   offers: Offer[];
+  currentOffer: Offer;
 };
 
 const DEFAULT_COORDINATE = {
@@ -29,9 +28,7 @@ const currentCustomIcon = new Icon({
 });
 
 export default function MapOffer(props: MapOfferProps): JSX.Element {
-  const selectedOffer = useAppSelector(getSelectedOffer);
-
-  const { offers } = props;
+  const { offers, currentOffer } = props;
   const cityLocation = offers[0]?.city.location ?? DEFAULT_COORDINATE;
   const mapRef = useRef(null);
   const map = useMap(mapRef, cityLocation);
@@ -53,18 +50,9 @@ export default function MapOffer(props: MapOfferProps): JSX.Element {
         });
         marker.setIcon(defaultCustomIcon).addTo(markerGroup);
       });
-      return () => {
-        map.removeLayer(markerGroup);
-      };
-    }
-  }, [map, offers, selectedOffer, cityLocation]);
-
-  useEffect(() => {
-    if (map) {
-      const markerGroup = leaflet.layerGroup().addTo(map);
       const currentMark = new Marker({
-        lat: selectedOffer!.location.latitude,
-        lng: selectedOffer!.location.longitude,
+        lat: currentOffer.location.latitude,
+        lng: currentOffer.location.longitude,
       });
 
       currentMark.setIcon(currentCustomIcon).addTo(markerGroup);
@@ -72,7 +60,7 @@ export default function MapOffer(props: MapOfferProps): JSX.Element {
         map.removeLayer(markerGroup);
       };
     }
-  }, [map, offers, selectedOffer]);
+  }, [map, offers, currentOffer, cityLocation]);
 
   return <div style={{ height: '500px' }} ref={mapRef}></div>;
 }
